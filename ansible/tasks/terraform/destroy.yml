@@ -14,7 +14,6 @@
           root_ssh_key_path: "{{ root_private_key_path }}"
           do_token: "{{ do_token }}"
           name: "{{ vps_name }}"
-          do_private_networking: "false"
         force_init: true
       register: terraform_infra
 
