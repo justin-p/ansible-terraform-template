@@ -2,7 +2,7 @@
 
 Template that uses Ansible to call terraform to create a VM. Then Ansible uses the Terraform to provision the created VM. Currently this project has 1 terraform project to setup a singular DigitalOcean droplet.
 
-Intented to be a quick 'grab and go' for cases where:
+Intended to be a quick 'grab and go' for cases where:
 
 - You quickly need a DigitalOcean droplet with some barebones config.
 - You want to test/build a Ansible playbook/role against a DigitalOcean droplet.
