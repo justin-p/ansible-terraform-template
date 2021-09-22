@@ -1,0 +1,43 @@
+---
+- name: Wait for file locks (digitalocean likes to lock some apt files on initial droplet creation)
+  ansible.builtin.pause:
+    minutes: 1
+
+- name: Run 'robertdebock.update_package_cache'-role
+  ansible.builtin.include_role:
+    name: robertdebock.update_package_cache
+
+- name: Run 'robertdebock.core_dependencies'-role
+  ansible.builtin.include_role:
+    name: robertdebock.core_dependencies
+
+- name: Run 'robertdebock.bootstrap'-role
+  ansible.builtin.include_role:
+    name: robertdebock.bootstrap
+
+- name: Run 'robertdebock.epel'-role
+  ansible.builtin.include_role:
+    name: robertdebock.epel
+
+- name: Run 'robertdebock.update'-role
+  ansible.builtin.include_role:
+    name: robertdebock.update
+  vars:
+    update_reboot: false
+
+- name: Run 'robertdebock.firewall'-role
+  ansible.builtin.include_role:
+    name: robertdebock.firewall
+  vars:
+    firewall_services:
+      - name: ssh
+
+- name: Run 'robertdebock.hostname'-role
+  ansible.builtin.include_role:
+    name: robertdebock.hostname
+  vars:
+    hostname: "{{ server_hostname }}"
+    hostname_reboot: true
+
+- name: Flush handlers triggerd turing bootstrap
+  meta: flush_handlers

@@ -1,0 +1,57 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - "{{ playbook_dir }}/../../defaults/template_info.yml"
+    - "{{ playbook_dir }}/../../defaults/secrets.yml"
+
+  pre_tasks:
+    - name: Ensure needed ssh keys are created.
+      community.crypto.openssh_keypair:
+        path: "{{ sshkey_folder }}/{{ item }}-{{ vps_name }}"
+      with_items:
+        - "{{ root_username }}"
+
+    - name: "Ensure {{ sshkey_folder }}/known_hosts exists"
+      ansible.builtin.copy:
+        content: ""
+        dest: "{{ sshkey_folder }}/known_hosts"
+        force: false
+        mode: 0664
+
+  tasks:
+    - name: Ensure host is deployed with terraform.
+      community.general.terraform:
+        project_path: "{{ playbook_dir }}/../../../terraform/digitalocean/single_vm"
+        variables:
+          root_ssh_key_path: "{{ root_private_key_path }}"
+          do_token: "{{ do_token }}"
+          name: "{{ vps_name }}"
+        force_init: true
+      register: terraform_infra
+
+    - name: Add deployed host to ansible inventory.
+      ansible.builtin.add_host:
+        hostname: "{{ terraform_infra.outputs.vps_ipv4_address.value }}"
+        groups: group_1
+      changed_when: false
+
+    - name: Scan ~/.ssh/known_host file for a entry of {{ terraform_infra.outputs.vps_ipv4_address.value }}
+      ansible.builtin.command: ssh-keygen -H -F {{ terraform_infra.outputs.vps_ipv4_address.value }}
+      delegate_to: localhost
+      register: keygen_scan
+      changed_when: '"found: line" in keygen_scan.stdout'
+      failed_when:
+        - keygen_scan.rc != 0 and keygen_scan.rc != 1
+
+    - name: Remove {{ terraform_infra.outputs.vps_ipv4_address.value }} from SSH known hosts if it was found.
+      ansible.builtin.command: ssh-keygen -R {{ terraform_infra.outputs.vps_ipv4_address.value }}
+      delegate_to: localhost
+      register: keygen_remove
+      when: '"found: line" in keygen_scan.stdout'
+
+    - name: Add {{ terraform_infra.outputs.vps_ipv4_address.value }} to SSH known hosts.
+      ansible.builtin.shell: ssh-keyscan -H {{ terraform_infra.outputs.vps_ipv4_address.value }} >> ~/.ssh/known_hosts
+      delegate_to: localhost
+      changed_when: true
