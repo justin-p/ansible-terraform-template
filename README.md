@@ -38,7 +38,7 @@ If you want to setup variables for your tasks add these to the `ansible/defaults
 
 ### Terraform development (optional)
 
-If you want to work on the terraform projectfiles themselves outside of ansible, create a copy of the `terraform.tfvars.example` file and fill in the `do_token` with your digitalocean API key.
+If you want to work on the terraform project files themselves outside of ansible, create a copy of the `terraform.tfvars.example` file and fill in the `do_token` with your digitalocean API key.
 
 ```bash
 cp terraform/digitalocean/single_vm/terraform.tfvars.example terraform/digitalocean/single_vm/terraform.tfvars 
