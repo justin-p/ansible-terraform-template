@@ -23,11 +23,10 @@ Copy the example secrets var file and add the your digitalocean API key.
 cp ansible/defaults/secrets.example.yml cp ansible/defaults/secrets.yml 
 ```
 
-Now you can run: 
+Now you can run:
 
 - `ansible-playbook ansible/main.yml` to create and setup the server.
 - `ansible-playbook ansible/main.yml --tags=destroy` to remove the server.
-
 
 #### Your extra tasks
 
@@ -36,7 +35,6 @@ If you require addtional tasks to be ran after inital configuration you can add 
 If your tasks require addtional roles you can let them be automaticlly installed by adding them to the `ansible/files/requirements.yml` file. This will install theses roles to the `ansible/roles` folder.
 
 If you want to setup variables for your tasks add these to the `ansible/defaults/main.yml` file.
-
 
 ### Terraform development (optional)
 
