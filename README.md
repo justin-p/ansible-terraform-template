@@ -14,13 +14,13 @@ Intended to be a quick 'grab and go' for cases where:
 Copy the example template_info var file and add the edit the information as you see fit.
 
 ```bash
-cp ansible/defaults/template_info.example.yml cp ansible/defaults/template_info.yml 
+cp ansible/defaults/template_info.example.yml ansible/defaults/template_info.yml 
 ```
 
 Copy the example secrets var file and add the your digitalocean API key.
 
 ```bash
-cp ansible/defaults/secrets.example.yml cp ansible/defaults/secrets.yml 
+cp ansible/defaults/secrets.example.yml ansible/defaults/secrets.yml 
 ```
 
 Now you can run:
