@@ -30,21 +30,21 @@ Now you can run:
 
 #### Your extra tasks
 
-If you require addtional tasks to be ran after inital configuration you can add those into `ansible/tasks/main.yml`.
+If you require additional tasks to be ran after initial configuration you can add those into `ansible/tasks/main.yml`.
 
-If your tasks require addtional roles you can let them be automaticlly installed by adding them to the `ansible/files/requirements.yml` file. This will install theses roles to the `ansible/roles` folder.
+If your tasks require additional roles you can let them be automatically installed by adding them to the `ansible/files/requirements.yml` file. This will install theses roles to the `ansible/roles` folder.
 
 If you want to setup variables for your tasks add these to the `ansible/defaults/main.yml` file.
 
 ### Terraform development (optional)
 
-If you want to work on the terraform projectfiles themselfs outside of ansible, create a copy of the `terraform.tfvars.example` file and fill in the `do_token` with your digitalocean API key.
+If you want to work on the terraform projectfiles themselves outside of ansible, create a copy of the `terraform.tfvars.example` file and fill in the `do_token` with your digitalocean API key.
 
 ```bash
 cp terraform/digitalocean/single_vm/terraform.tfvars.example terraform/digitalocean/single_vm/terraform.tfvars 
 ```
 
-Then `cd` to the terraform project folder and run terraform as usaual.
+Then `cd` to the terraform project folder and run terraform as usual.
 
 ```bash
 cd terraform/digitalocean/single_vm/
