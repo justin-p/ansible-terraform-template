@@ -1,5 +1,9 @@
 ---
 - ansible.builtin.import_playbook: tasks/terraform/create.yml
+  tags: always
+
+- ansible.builtin.import_playbook: tasks/terraform/destroy.yml
+  tags: ['never', 'destroy']
 
 - hosts: group_1
   vars_files:
@@ -15,13 +19,13 @@
       ansible.builtin.command: ansible-galaxy install -r files/requirements.yml -p roles/
       delegate_to: localhost
       changed_when: false
+      tags: always
 
     - name: Bootstrap host with barebones config
-      ansible.builtin.include_tasks: tasks/bootstrap/main.yml
+      ansible.builtin.import_tasks: tasks/bootstrap/main.yml
+      tags: ['never', 'create']
 
   tasks:
     - name: Your tasks here
-      ansible.builtin.include_tasks: tasks/main.yml
-
-- ansible.builtin.import_playbook: tasks/terraform/destroy.yml
-  tags: ['never', 'destroy']
+      ansible.builtin.import_tasks: tasks/main.yml
+      tags: always

@@ -25,7 +25,8 @@ cp ansible/defaults/secrets.example.yml ansible/defaults/secrets.yml
 
 Now you can run:
 
-- `ansible-playbook ansible/main.yml` to create and setup the server.
+- `ansible-playbook ansible/main.yml --tags=create` to create, bootstrap and apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
+- `ansible-playbook ansible/main.yml` to apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
 - `ansible-playbook ansible/main.yml --tags=destroy` to remove the server.
 
 #### Your extra tasks

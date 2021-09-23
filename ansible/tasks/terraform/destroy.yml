@@ -44,3 +44,6 @@
         state: absent
       with_items:
         - "{{ root_username }}"
+
+    - name: Remove hosts from inventory
+      meta: refresh_inventory
