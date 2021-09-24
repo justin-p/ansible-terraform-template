@@ -11,13 +11,13 @@ Intended to be a quick 'grab and go' for cases where:
 
 ### Ansible
 
-Copy the example template_info var file and add the edit the information as you see fit.
+Copy the example `template_info.example.yml` file and add the edit the information as you see fit.
 
 ```bash
 cp ansible/defaults/template_info.example.yml ansible/defaults/template_info.yml 
 ```
 
-Copy the example secrets var file and add the your cloud provder API key(s).
+Copy the example `secrets.example.yml` file and add the your cloud provder API key('s).
 
 ```bash
 cp ansible/defaults/secrets.example.yml ansible/defaults/secrets.yml 
@@ -27,7 +27,7 @@ Now you can run:
 
 - `ansible-playbook ansible/main.yml --tags=create` to create, bootstrap and apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
 - `ansible-playbook ansible/main.yml` to apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
-- `ansible-playbook ansible/main.yml --tags=destroy` to remove the server.
+- `ansible-playbook ansible/main.yml --tags=destroy` to destroy the server at the cloud provider.
 
 #### Your extra tasks
 
