@@ -25,9 +25,11 @@ cp ansible/defaults/secrets.example.yml ansible/defaults/secrets.yml
 
 Now you can run:
 
-- `ansible-playbook ansible/main.yml --tags=create` to create, bootstrap and apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
+- `ansible-playbook ansible/main.yml --tags=create` to create, bootstrap and apply your task to the server created server (if any are defined in `ansible/tasks/main.yml`).
 - `ansible-playbook ansible/main.yml` to apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
-- `ansible-playbook ansible/main.yml --tags=destroy` to destroy the server at the cloud provider.
+- `ansible-playbook ansible/main.yml --tags=destroy` to destroy the server at the current configured cloud provider.
+
+**NOTE:** The template is *not* smart enough to know if you have switch cloud providers between runs and not have removed the previous deployed VM. Don't blame me if you get large bills because you forgot that you had a VM deployed :) Make sure to remove the VM before switching providers if you tent to forget things.
 
 #### Your extra tasks
 
