@@ -3,6 +3,7 @@
   gather_facts: false
 
   vars_files:
+    - "{{ playbook_dir }}/../../vars/main.yml"
     - "{{ playbook_dir }}/../../defaults/template_info.yml"
     - "{{ playbook_dir }}/../../defaults/secrets.yml"
 
@@ -20,14 +21,16 @@
         force: false
         mode: 0664
 
+    - name: "Ensure 'terraform.tfvars' template is deployed"
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../../templates/{{ _cloud_provider }}_terraform.tfvars.j2"
+        dest: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm/terraform.tfvars"
+
   tasks:
-    - name: Ensure host is deployed with terraform.
+    - name: Ensure host is deployed with terraform on {{ _cloud_provider }}.
       community.general.terraform:
-        project_path: "{{ playbook_dir }}/../../../terraform/digitalocean/single_vm"
-        variables:
-          root_ssh_key_path: "{{ root_private_key_path }}"
-          do_token: "{{ do_token }}"
-          name: "{{ vps_name }}"
+        project_path: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm"
+        variables_files: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm/terraform.tfvars"
         force_init: true
       register: terraform_infra
 

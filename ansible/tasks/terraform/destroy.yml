@@ -3,17 +3,15 @@
   gather_facts: false
 
   vars_files:
+    - "{{ playbook_dir }}/../../vars/main.yml"
     - "{{ playbook_dir }}/../../defaults/template_info.yml"
     - "{{ playbook_dir }}/../../defaults/secrets.yml"
 
   tasks:
     - name: Gathering facts.
       community.general.terraform:
-        project_path: "{{ playbook_dir }}/../../../terraform/digitalocean/single_vm"
-        variables:
-          root_ssh_key_path: "{{ root_private_key_path }}"
-          do_token: "{{ do_token }}"
-          name: "{{ vps_name }}"
+        project_path: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm"
+        variables_files: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm/terraform.tfvars"
         force_init: true
       register: terraform_infra
 
@@ -31,11 +29,10 @@
       register: keygen_remove
       when: '"found: line" in keygen_scan.stdout'
 
-    - name: Ensure droplet is destroyed with terraform
+    - name: Ensure host is destroyed with terraform on {{ _cloud_provider }}.
       community.general.terraform:
-        project_path: "{{ playbook_dir }}/../../../terraform/digitalocean/single_vm"
-        variables:
-          do_token: "{{ do_token }}"
+        project_path: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm"
+        variables_files: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm/terraform.tfvars"
         state: absent
 
     - name: Ensure local ssh keys are destroyed

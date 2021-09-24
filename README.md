@@ -1,11 +1,11 @@
 # Ansible Terraform Template
 
-Template that uses Ansible to call terraform to create a VM. Then Ansible uses the Terraform to provision the created VM. Currently this project has 1 terraform project to setup a singular DigitalOcean droplet.
+Template that uses Ansible to call terraform to create a VM. Then Ansible uses the Terraform to provision the created VM. Currently this project supports 2 cloud providers, `digitalocean` and `hetnzer`. Each cloud provider has 1 terraform to setup a singular VM.
 
 Intended to be a quick 'grab and go' for cases where:
 
-- You quickly need a DigitalOcean droplet with some barebones config.
-- You want to test/build a Ansible playbook/role against a DigitalOcean droplet.
+- You quickly need a cloud VM with some barebones config.
+- You want to test/build a Ansible playbook/role against a cloud provider VM.
 
 ## Setup
 
@@ -17,7 +17,7 @@ Copy the example template_info var file and add the edit the information as you 
 cp ansible/defaults/template_info.example.yml ansible/defaults/template_info.yml 
 ```
 
-Copy the example secrets var file and add the your digitalocean API key.
+Copy the example secrets var file and add the your cloud provder API key(s).
 
 ```bash
 cp ansible/defaults/secrets.example.yml ansible/defaults/secrets.yml 
@@ -39,17 +39,20 @@ If you want to setup variables for your tasks add these to the `ansible/defaults
 
 ### Terraform development (optional)
 
-If you want to work on the terraform project files themselves outside of ansible, create a copy of the `terraform.tfvars.example` file and fill in the `do_token` with your digitalocean API key.
+If you want to work on the terraform project files themselves outside of ansible, create a copy of the `terraform.tfvars.example` file and fill in the token variable with your API key.
 
 ```bash
-cp terraform/digitalocean/single_vm/terraform.tfvars.example terraform/digitalocean/single_vm/terraform.tfvars 
+cp terraform.tfvars.example terraform.tfvars 
 ```
+
+**NOTE:** The ansible playbook also creates `terraform.tfvars ` files for you. In that case just verify if the API keys match.
 
 Then `cd` to the terraform project folder and run terraform as usual.
 
 ```bash
-cd terraform/digitalocean/single_vm/
 terraform init
+terraform apply
+terraform destroy
 ```
 
 ## License

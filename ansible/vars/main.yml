@@ -1,0 +1,6 @@
+_list_of_cloud_providers:
+  default: digitalocean
+  digitalocean: digitalocean
+  hetzner: hetzner
+
+_cloud_provider: "{{_list_of_cloud_providers[cloud_provider] | default(_list_of_cloud_providers['default'] ) }}"
