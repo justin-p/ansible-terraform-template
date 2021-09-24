@@ -1,6 +1,6 @@
 # Ansible Terraform Template
 
-Template that uses Ansible to call terraform to create a VM. Then Ansible uses the Terraform to provision the created VM. Currently this project supports 2 cloud providers, `digitalocean` and `hetnzer`. Each cloud provider has 1 terraform to setup a singular VM.
+Template that uses Ansible to call terraform to create a VM. Then Ansible uses the Terraform to provision the created VM. Currently this project supports 2 cloud providers, `digitalocean` and `hetzner`. Each cloud provider has 1 terraform to setup a singular VM.
 
 Intended to be a quick 'grab and go' for cases where:
 
