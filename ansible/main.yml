@@ -5,15 +5,8 @@
 - ansible.builtin.import_playbook: tasks/terraform/destroy.yml
   tags: ['never', 'destroy']
 
-- hosts: group_1
-  vars_files:
-    - "{{ playbook_dir }}/defaults/main.yml"
-    - "{{ playbook_dir }}/defaults/template_info.yml"
-
-  vars:
-    ansible_user: "{{ root_username }}"
-    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
-
+- hosts: localhost
+  gather_facts: false
   pre_tasks:
     - name: Get required roles with Ansible Galaxy
       ansible.builtin.command: ansible-galaxy install -r files/requirements.yml -p roles/
@@ -21,11 +14,29 @@
       changed_when: false
       tags: always
 
+- hosts: all
+  vars_files:
+    - "{{ playbook_dir }}/defaults/main.yml"
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  
+  tasks:
     - name: Bootstrap host with barebones config
       ansible.builtin.import_tasks: tasks/bootstrap/main.yml
       tags: ['never', 'create']
 
-  tasks:
-    - name: Your tasks here
-      ansible.builtin.import_tasks: tasks/main.yml
-      tags: always
+## add your plays here
+# 
+# - hosts: all
+#   vars:
+#     ansible_user: "{{ root_username }}"
+#     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+# 
+#   tasks:
+#     - name: Your tasks here
+#       ansible.builtin.import_tasks: tasks/main.yml
+#       tags: always
+# 

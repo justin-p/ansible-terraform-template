@@ -1,5 +1,11 @@
-variable "name" {
-  default = "testvm"
+variable "ansible_groups" {
+  description = "A list of tags used for Ansible Groups"
+  type        = list(string)
+  default     = ["ansible"]
+}
+
+variable "project" {
+  default = "testing"
 }
 
 resource "random_string" "name" {
@@ -9,7 +15,7 @@ resource "random_string" "name" {
 }
 
 locals {
-  name = "${var.name}-${terraform.workspace}-${random_string.name.result}"
+  name = "${random_string.name.result}-${var.project}-${terraform.workspace}"
 }
 
 variable "root_username" {
@@ -19,7 +25,7 @@ variable "root_username" {
 
 variable "root_ssh_key_path" {
   description = "The path of the ssh key for the root account"
-  default     = "~/.ssh/root-testvm"
+  default     = "~/.ssh/temp_key"
 }
 
 variable "do_token" {
@@ -42,8 +48,8 @@ variable "server_type" {
 }
 
 variable "do_tag" {
-  description = "Tag added to the DigitalOcean Droplet"
-  default     = "ansible_terraform_testvm"
+  description = "Additional tag added to the DigitalOcean Droplet"
+  default     = "created_with_ansible_terraform"
 }
 
 variable "do_description" {

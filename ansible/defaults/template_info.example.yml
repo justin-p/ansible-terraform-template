@@ -1,12 +1,16 @@
 ---
-sshkey_folder: /home/justin/.ssh/
+project_name: testing
+cloud_provider: "digitalocean"
 
-vps_name: testvm
-domain: "testing.test"
-server_hostname: "{{ vps_name  }}.{{ domain }}"
+# Each group name in the list below will create a host using terraform.
+# Each created host will be added back to the ansible inventory with the matching group name.
+# This allows you to spin up multiple types of hosts and provision them differently according to their role, indicated by their group name.
+#ansible_groups: "[\"mailhost\", \"mailgateway\", \"evilginx\"]"
+ansible_groups: "[\"ansible\"]"
+
+sshkey_folder: /home/justin/.ssh/
 
 root_username: root
 root_private_key_path: "{{ sshkey_folder }}/{{ root_username }}-{{ vps_name }}"
 root_public_key_path: "{{ sshkey_folder }}/{{ root_username }}-{{ vps_name }}.pub"
 
-cloud_provider: "digitalocean"

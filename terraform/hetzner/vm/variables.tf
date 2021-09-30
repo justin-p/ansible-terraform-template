@@ -1,6 +1,13 @@
-variable "name" {
-  default = "testvm"
+variable "ansible_groups" {
+  description = "A list of tags used for Ansible Groups"
+  type        = list(string)
+  default     = ["ansible"]
 }
+
+variable "project" {
+  default = "testing"
+}
+
 
 resource "random_string" "name" {
   length  = 6
@@ -9,9 +16,8 @@ resource "random_string" "name" {
 }
 
 locals {
-  name = "${var.name}-${terraform.workspace}-${random_string.name.result}"
+  name = "${random_string.name.result}-${var.project}-${terraform.workspace}"
 }
-
 
 variable "root_username" {
   description = "The username of the root account"
@@ -20,7 +26,7 @@ variable "root_username" {
 
 variable "root_ssh_key_path" {
   description = "The path of the ssh key for the root account"
-  default     = "~/.ssh/testvm"
+  default     = "~/.ssh/temp_key"
 }
 
 variable "hetzner_token" {
