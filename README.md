@@ -115,7 +115,7 @@ host_list: {
 }
 ```
 
-Since we have not defined any other values the missing values will still use their default settings as show below: 
+Since we have not defined any other values on both the hosts the missing values will still use their default settings as show below: 
 
 ```terraform
 locals {
@@ -146,7 +146,7 @@ Since both hosts are added to the web group in our inventory we don't need to up
 
 ##### Example 3
 
-The example below defines one three on digitalocean. We decided that one our web host needed a database server. So we defined a third server in our `host_list`. Since we expect our DB to use more resources we changed its size to `s-2vcpu-4g`. We also moved one webhost `web01` to a other digitalocean datacenter.
+The example below defines three hosts on digitalocean. We decided that one our website needed a database, and thus a database server, so we defined a third server in our `host_list`. Since we expect our DB to use more resources we changed set its size to `s-2vcpu-4g`. We also moved the webhost `web01` to a other digitalocean datacenter.
 
 ```yaml
 host_list: {
@@ -166,7 +166,7 @@ host_list: {
 }
 ```
 
-All the other values are missing values will again use their default settings as show below: 
+All the other values that are missing on each host will again use their default settings as show below: 
 
 ```terraform
 locals {
@@ -207,7 +207,7 @@ In our ansible code we would define a additional play against the the ansible gr
 
 ##### Example 4
 
-The example below defines five hosts on two cloud providers. Our previous stack on digitalocean and two additional mail servers on hetzner.
+The example below defines five hosts split on two different cloud providers. Our previous stack on digitalocean and two additional mail servers on hetzner.
 
 ```yaml
 host_list: {
@@ -235,7 +235,7 @@ host_list: {
 }
 ```
 
-All the other values are missing values will again use their default settings as show below: 
+All the missing values will again use their default settings as show below: 
 
 ```terraform
 ## digitalocean
@@ -261,7 +261,7 @@ locals {
 }
 ```
 
-In our ansible code we would define a additional play against the the ansible group `mailhost` to configure our mail servers.
+In our ansible code we would define a additional play against the the ansible group `mail` to configure our mail servers.
 
 ```yaml
 ---
