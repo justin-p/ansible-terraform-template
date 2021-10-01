@@ -55,7 +55,7 @@ By setting up a `host_list` variable in the `template_info.yml`-file you can def
 
 ##### Example 1
 
-The example below defines one hosts on digitalocean. In this case we want to deploy a simple webserver.
+The example below defines one host on digitalocean. In this case we want to deploy a simple webserver.
 
 ```yaml
 host_list: {
