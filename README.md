@@ -81,7 +81,7 @@ locals {
 }
 ```
 
-Terraform also adds tags/lables to the deployed hosts on the cloud provider. In this case we added a tag to `web01` called `web`. These tags/lables are used by Ansible to add the specific host to an inventory groups that matches the tag/label. Meaning you can easily add host to specific groups while the inventory is still dynamically build.
+Terraform also adds tags/lables to the deployed hosts on the cloud provider. In this case we added a tag to `web01` called `web`. These tags/lables are used by Ansible to add the specific host to an inventory groups that matches the tag/label. Meaning you can easily add host to specific groups while the inventory is still dynamically build based off Terraform output.
 
 Thus in our ansible code we define a play against the the ansible group `web` to configure our web host.
 
