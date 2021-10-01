@@ -23,29 +23,39 @@
 
     - name: "Ensure 'terraform.tfvars' template is deployed"
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../../templates/{{ _cloud_provider }}_terraform.tfvars.j2"
-        dest: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/vm/terraform.tfvars"
+        src: "{{ playbook_dir }}/../../templates/{{ item }}_terraform.tfvars.j2"
+        dest: "{{ playbook_dir }}/../../../terraform/{{ item }}/vm/terraform.tfvars"
+      loop: "{{ host_list.keys() }}"
 
   tasks:
-    - name: Ensure host is deployed with terraform on {{ _cloud_provider }}.
+    - name: Ensure each host is deployed with terraform on digitalocean.
       community.general.terraform:
-        project_path: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/vm"
-        variables_files: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/vm/terraform.tfvars"
+        project_path: "{{ playbook_dir }}/../../../terraform/digitalocean/vm"
+        variables_files: "{{ playbook_dir }}/../../../terraform/digitalocean/vm/terraform.tfvars"
         force_init: true
-      register: terraform_infra
+      register: terraform_infra_digitalocean
+      when: host_list['digitalocean'][0] is defined
 
-    - name: Add deployed digitalocean host to ansible inventory.
+    - name: Ensure each host is deployed with terraform on hetzner.
+      community.general.terraform:
+        project_path: "{{ playbook_dir }}/../../../terraform/hetzner/vm"
+        variables_files: "{{ playbook_dir }}/../../../terraform/hetzner/vm/terraform.tfvars"
+        force_init: true
+      register: terraform_infra_hetzner
+      when: host_list['hetzner'][0] is defined
+
+    - name: Add each deployed digitalocean host to ansible inventory.
       ansible.builtin.add_host:
         hostname: "{{ item.value.ipv4_address }}"
         groups: "{{ item.value.tags }}"
       changed_when: false
-      with_dict: "{{ terraform_infra.outputs.vms.value }}"
-      when: _cloud_provider == "digitalocean"
+      with_dict: "{{ terraform_infra_digitalocean.outputs.vms.value }}"
+      when: terraform_infra_digitalocean.outputs.vms.value is defined
 
-    - name: Add deployed hetzner host to ansible inventory.
+    - name: Add each deployed hetzner host to ansible inventory.
       ansible.builtin.add_host:
         hostname: "{{ item.value.ipv4_address }}"
         groups: "{{ item.value.labels.keys() }}"
       changed_when: false
-      with_dict: "{{ terraform_infra.outputs.vms.value }}"
-      when: _cloud_provider == "hetzner"
+      with_dict: "{{ terraform_infra_hetzner.outputs.vms.value }}"
+      when: terraform_infra_hetzner.outputs.vms.value is defined      

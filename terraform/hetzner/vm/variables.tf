@@ -1,22 +1,40 @@
-variable "ansible_groups" {
-  description = "A list of tags used for Ansible Groups"
-  type        = list(string)
-  default     = ["ansible"]
-}
-
-variable "project" {
+variable "project_name" {
   default = "testing"
 }
 
+variable "servers" {
+  description = "A map contaning server(s) that should be created."
+  type = map(object({
+    server_type = optional(string)
+    labels      = map(string)
+    image       = optional(string)
+    name        = string
+    location    = optional(string)
+    backups     = optional(bool)
+  }))
+  default = {
+    "host1" = {
+      name   = "host1"
+      labels = { terraform = "" }
+    }
+  }
+}
+
+## Default values if incompleet server map is supplied
+locals {
+  servers = defaults(var.servers, {
+    server_type = "cx11"
+    image       = "ubuntu-20.04"
+    name        = "testvm"
+    location    = "nbg1"
+    backups     = false
+  })
+}
 
 resource "random_string" "name" {
   length  = 6
   special = false
   upper   = false
-}
-
-locals {
-  name = "${random_string.name.result}-${var.project}-${terraform.workspace}"
 }
 
 variable "root_username" {
@@ -32,24 +50,4 @@ variable "root_ssh_key_path" {
 variable "hetzner_token" {
   description = "Your Hetzner API token"
   default     = "abcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyzabcdefghijqr"
-}
-
-variable "image" {
-  description = "The image to use when creating the VPS"
-  default     = "ubuntu-20.04"
-}
-
-variable "server_type" {
-  description = "VPS Size"
-  default     = "cx11"
-}
-
-variable "location" {
-  description = "Region to create VPS in"
-  default     = "nbg1"
-}
-
-variable "reverse_dns" {
-  description = "Value to set DNS pointer record (PTR) to for this host/ip."
-  default     = ""
 }

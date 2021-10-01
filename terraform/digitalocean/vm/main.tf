@@ -1,47 +1,14 @@
-variable "servers" {
-  type = map(object({
-    size               = optional(string)
-    tag                = list(string)
-    image              = optional(string)
-    name               = string
-    region             = optional(string)
-    ipv6               = optional(bool)
-    monitoring         = optional(bool)
-    private_networking = optional(bool)
-  }))
-}
-
-locals {
-  servers = defaults(var.servers, {
-    size               = "s-1vcpu-1gb"
-    image              = "ubuntu-20-04-x64"
-    region             = "ams3"
-    monitoring         = false
-    private_networking = false
-  })
-}
-
-#locals {
-#  all_server_tags = flatten(values(var.servers)[*].tag)
-#}
-#
-#resource "digitalocean_tag" "main" {
-#  for_each = toset(local.all_server_tags)
-#  name     = each.value
-#}
-
-
 resource "digitalocean_ssh_key" "main" {
-  name       = "${var.project}-${var.root_username}"
+  name       = "${var.project_name}-${var.root_username}"
   public_key = file("${var.root_ssh_key_path}.pub")
 }
 
 resource "digitalocean_droplet" "main" {
-  for_each = local.servers # Create a vm for each defined in the ansible var
+  for_each = local.servers # Create a vm for each defined in the server map for this cloud provider
 
   image              = each.value.image
   tags               = flatten(each.value.tag)
-  name               = "${var.project}-${each.value.name}-${terraform.workspace}-${random_string.name.result}"
+  name               = "${var.project_name}-${each.value.name}-${terraform.workspace}-${random_string.name.result}"
   region             = each.value.region
   size               = each.value.size
   ipv6               = each.value.ipv6
@@ -67,8 +34,8 @@ resource "null_resource" "ssh_check" {
 }
 
 resource "digitalocean_project" "main" {
-  name        = var.project
-  description = var.do_description
+  name        = var.project_name
+  description = var.project_description
   purpose     = "Other"
   resources   = [for droplet in digitalocean_droplet.main : droplet.urn] # add all created droplets to our project
 }

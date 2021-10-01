@@ -8,11 +8,12 @@
     - "{{ playbook_dir }}/../../defaults/secrets.yml"
 
   tasks:
-    - name: Ensure host is destroyed with terraform on {{ _cloud_provider }}.
+    - name: Ensure all host are destroyed with terraform on all currently defined cloud providers.
       community.general.terraform:
-        project_path: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/vm"
-        variables_files: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/vm/terraform.tfvars"
+        project_path: "{{ playbook_dir }}/../../../terraform/{{ item }}/vm"
+        variables_files: "{{ playbook_dir }}/../../../terraform/{{ item }}/vm/terraform.tfvars"
         state: absent
+      loop: "{{ host_list.keys() }}"
 
     - name: Ensure local ssh keys are destroyed
       ansible.builtin.file:

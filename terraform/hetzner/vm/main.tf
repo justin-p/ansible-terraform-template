@@ -1,34 +1,13 @@
-variable "servers" {
-  type = map(object({
-    server_type        = optional(string)
-    labels             = map(string)
-    image              = optional(string)
-    name               = string
-    location           = optional(string)
-    backups            = optional(bool)
-  }))
-}
-
-locals {
-  servers = defaults(var.servers, {
-    server_type        = "cx11"
-    image              = "ubuntu-20.04"
-    name               = "testvm"
-    location           = "nbg1"
-    backups            = false
-  })
-}
-
 resource "hcloud_ssh_key" "main" {
-  name       = "${var.project}-${var.root_username}"
+  name       = "${var.project_name}-${var.root_username}"
   public_key = file("${var.root_ssh_key_path}.pub")
 }
 
 resource "hcloud_server" "main" {
-  for_each = local.servers # Create a vm for each defined in the ansible var
+  for_each = local.servers # Create a vm for each defined in the server map for this cloud provider
 
   labels      = each.value.labels
-  name        = "${var.project}-${each.value.name}-${terraform.workspace}-${random_string.name.result}"
+  name        = "${var.project_name}-${each.value.name}-${terraform.workspace}-${random_string.name.result}"
   image       = each.value.image
   server_type = each.value.server_type
   location    = each.value.location
@@ -39,7 +18,7 @@ resource "hcloud_server" "main" {
 resource "null_resource" "ssh_check" {
   # Ensure that SSH is ready and accepting connections on all hosts.
   for_each = local.servers
-  
+
   connection {
     type        = "ssh"
     user        = "root"

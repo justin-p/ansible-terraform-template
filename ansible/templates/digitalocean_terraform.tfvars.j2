@@ -1,10 +1,10 @@
-do_token = "{{ tokens[_cloud_provider] }}"
+do_token = "{{ tokens['digitalocean'] }}"
 
-root_ssh_key_path= "{{ root_private_key_path }}"
 project = "{{ project_name }}"
+root_ssh_key_path= "{{ root_private_key_path }}"
 
 servers = {
-{% if do_host_list is defined%} {% for dict_item in do_host_list %}
+{% if host_list['digitalocean'][0]['name'] is defined%} {% for dict_item in host_list['digitalocean'] %}
   "{{dict_item['name']}}" = {
 {% if 'size' in dict_item %}    size = "{{dict_item['size']}}"
 {% endif %}
@@ -29,8 +29,8 @@ servers = {
   },
 {% endif %}
 {% endfor %}{% endif %}
-{% if do_host_list is not defined%}
-  "host1" = {
+{% if host_list['digitalocean'][0]['name'] is not defined%}
+  " ansible var" = {
     name = "host1"
     tag = ["ansible"]
   }
