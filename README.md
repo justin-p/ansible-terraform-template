@@ -48,9 +48,10 @@ If you want to setup variables for your tasks add these to the `ansible/defaults
 
 By setting up a `host_list` variable in the `template_info.yml`-file you can define the following things:
 
-- How many should be deployed.
+- How many hosts should be deployed.
 - How a host should be deployed.
-- Where they should be deployed.
+- Where the host should be deployed.
+- To what ansible inventory group the host should be added.
 
 ##### Example 1
 
