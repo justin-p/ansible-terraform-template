@@ -1,6 +1,38 @@
-ansible_groups = {{ ansible_groups }}
-
 do_token = "{{ tokens[_cloud_provider] }}"
 
 root_ssh_key_path= "{{ root_private_key_path }}"
 project = "{{ project_name }}"
+
+servers = {
+{% if do_host_list is defined%} {% for dict_item in do_host_list %}
+  "{{dict_item['name']}}" = {
+{% if 'size' in dict_item %}    size = "{{dict_item['size']}}"
+{% endif %}
+{% if 'tag' in dict_item %}    tag = {{dict_item['tag']}}
+{% endif %}
+{% if 'image' in dict_item %}    image = "{{dict_item['image']}}"
+{% endif %}
+{% if 'name' in dict_item %}    name = "{{dict_item['name']}}"
+{% endif %}
+{% if 'region' in dict_item %}    region = "{{dict_item['region']}}"
+{% endif %}
+{% if 'ipv6' in dict_item %}    ipv6 = {{dict_item['ipv6']}}
+{% endif %}
+{% if 'monitoring' in dict_item %}    monitoring = {{dict_item['monitoring']}}
+{% endif %}
+{% if 'private_networking' in dict_item %}    private_networking = {{dict_item['private_networking']}}
+{% endif %}
+{% if loop.nextitem is not defined %}
+  }
+{% endif %}
+{% if loop.nextitem is defined %}
+  },
+{% endif %}
+{% endfor %}{% endif %}
+{% if do_host_list is not defined%}
+  "host1" = {
+    name = "host1"
+    tag = ["ansible"]
+  }
+{% endif %}
+}

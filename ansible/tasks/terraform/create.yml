@@ -34,9 +34,18 @@
         force_init: true
       register: terraform_infra
 
-    - name: Add deployed host to ansible inventory.
+    - name: Add deployed digitalocean host to ansible inventory.
       ansible.builtin.add_host:
         hostname: "{{ item.value.ipv4_address }}"
-        groups: "{{ item.key }}"
+        groups: "{{ item.value.tags }}"
       changed_when: false
       with_dict: "{{ terraform_infra.outputs.vms.value }}"
+      when: _cloud_provider == "digitalocean"
+
+    - name: Add deployed hetzner host to ansible inventory.
+      ansible.builtin.add_host:
+        hostname: "{{ item.value.ipv4_address }}"
+        groups: "{{ item.value.labels.keys() }}"
+      changed_when: false
+      with_dict: "{{ terraform_infra.outputs.vms.value }}"
+      when: _cloud_provider == "hetzner"

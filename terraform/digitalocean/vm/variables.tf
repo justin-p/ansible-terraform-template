@@ -1,9 +1,3 @@
-variable "ansible_groups" {
-  description = "A list of tags used for Ansible Groups"
-  type        = list(string)
-  default     = ["ansible"]
-}
-
 variable "project" {
   default = "testing"
 }

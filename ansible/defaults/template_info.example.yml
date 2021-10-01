@@ -2,15 +2,31 @@
 project_name: testing
 cloud_provider: "digitalocean"
 
-# Each group name in the list below will create a host using terraform.
-# Each created host will be added back to the ansible inventory with the matching group name.
-# This allows you to spin up multiple types of hosts and provision them differently according to their role, indicated by their group name.
-#ansible_groups: "[\"mailhost\", \"mailgateway\", \"evilginx\"]"
-ansible_groups: "[\"ansible\"]"
-
 sshkey_folder: /home/justin/.ssh/
 
 root_username: root
 root_private_key_path: "{{ sshkey_folder }}/{{ root_username }}-{{ vps_name }}"
 root_public_key_path: "{{ sshkey_folder }}/{{ root_username }}-{{ vps_name }}.pub"
 
+## Example on how to define a host_list map to create multipe hosts.
+## Tags will be used as ansible groups.
+## This means that the host will be added ansible groups with the same name of the tags added below.
+## For all the options you can define in the map look at the terraform.tfvars.j2 template.
+#
+#do_host_list: [
+# { "name": "test01",
+#   "tag": "[\"evilginx\"]"
+# },
+# { "name": "test02",
+#   "tag": "[\"nginx\"]"
+# }
+#
+#
+#hetzner_host_list: [
+# { "name": "test03",
+#   "labels": "{mailhost = \"\"}"
+# },
+# { "name": "test04",
+#   "labels": "{mailgateway = \"\"}"
+# }
+#
