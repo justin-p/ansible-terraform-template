@@ -1,3 +1,3 @@
-output "vms" {
-  value = digitalocean_droplet.main[*]
+output "vm" {
+  value = digitalocean_droplet.main
 }

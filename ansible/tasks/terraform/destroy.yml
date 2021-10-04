@@ -3,17 +3,15 @@
   gather_facts: false
 
   vars_files:
-    - "{{ playbook_dir }}/../../vars/main.yml"
     - "{{ playbook_dir }}/../../defaults/template_info.yml"
     - "{{ playbook_dir }}/../../defaults/secrets.yml"
 
   tasks:
-    - name: Ensure all host are destroyed with terraform on all currently defined cloud providers.
+    - name: Ensure all host are destroyed with terraform
       community.general.terraform:
-        project_path: "{{ playbook_dir }}/../../../terraform/{{ item }}/vm"
-        variables_files: "{{ playbook_dir }}/../../../terraform/{{ item }}/vm/terraform.tfvars"
+        project_path: "{{ playbook_dir }}/../../../terraform/"
+        variables_files: "{{ playbook_dir }}/../../../terraform/terraform.tfvars"
         state: absent
-      loop: "{{ host_list.keys() }}"
 
     - name: Ensure local ssh keys are destroyed
       ansible.builtin.file:

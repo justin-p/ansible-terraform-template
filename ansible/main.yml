@@ -29,14 +29,15 @@
       tags: ['never', 'create']
 
 ## add your plays here
-# 
-# - hosts: all
-#   vars:
-#     ansible_user: "{{ root_username }}"
-#     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
-# 
-#   tasks:
-#     - name: Your tasks here
-#       ansible.builtin.import_tasks: tasks/main.yml
-#       tags: always
-# 
+
+#- hosts: your_group
+#  vars_files:
+#    - "{{ playbook_dir }}/defaults/template_info.yml"
+#  vars:
+#    ansible_user: "{{ root_username }}"
+#    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+#
+#  tasks:
+#    - name: Your tasks here
+#      ansible.builtin.import_tasks: tasks/main.yml
+#      tags: always

@@ -1,47 +1,46 @@
+variable "module_enabled" {
+  type = bool
+  default = false
+}
+
 variable "project_name" {
   default = "testing"
 }
 
-variable "project_description" {
-  description = "Description of the new to the DigitalOcean Project"
-  default     = "Server deployed with Terraform and Ansible template"
+variable "server_name" {
+  default = "host1"
 }
 
-variable "servers" {
-  description = "A map contaning server(s) that should be created."
-  type = map(object({
-    name               = string
-    size               = optional(string)
-    tag                = list(string)
-    image              = optional(string)
-    region             = optional(string)
-    ipv6               = optional(bool)
-    monitoring         = optional(bool)
-    private_networking = optional(bool)
-  }))
-  default = {
-    "host1" = {
-      name = "host1"
-      tag  = ["terraform"]
-    }
-  }
+variable "server_image" {
+  default = "ubuntu-20-04-x64"
 }
 
-## Default values if incompleet server map is supplied
-locals {
-  servers = defaults(var.servers, {
-    size               = "s-1vcpu-1gb"
-    image              = "ubuntu-20-04-x64"
-    region             = "ams3"
-    monitoring         = false
-    private_networking = false
-  })
+variable "server_tags" {
+  default = ["terraform"]
 }
 
-resource "random_string" "name" {
-  length  = 6
-  special = false
-  upper   = false
+variable "server_region" {
+  default = "ams3"
+}
+
+variable "server_size" {
+  default = "s-1vcpu-1gb"
+}
+
+variable "server_ipv6" {
+  default = false
+}
+
+variable "server_monitoring" {
+  default = false
+}
+
+variable "server_private_networking" {
+  default = false
+}
+
+variable "server_ssh_keys" {
+  default = ""
 }
 
 variable "root_username" {
@@ -54,7 +53,3 @@ variable "root_ssh_key_path" {
   default     = "~/.ssh/temp_key"
 }
 
-variable "do_token" {
-  description = "Your Digital Ocean Api token generated from here https://cloud.digitalocean.com/account/api/tokens"
-  default     = "123465789"
-}

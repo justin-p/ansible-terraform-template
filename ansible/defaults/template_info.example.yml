@@ -9,15 +9,15 @@ sshkey_folder: /home/justin-p/.ssh/
 #
 # host_list: {
 #   digitalocean: [
-#     { "name": "test01",
-#       "tag": "[\"nginx\"]"
+#     { "name": "host01",
+#       "tags": "[\"nginx\"]"
 #     },
-#     { "name": "test02",
-#       "tag": "[\"mysql\"]"
+#     { "name": "host02",
+#       "tags": "[\"mysql\"]"
 #     },
 #   ],
 #   hetzner: [
-#     { "name": "test03",
+#     { "name": "host03",
 #       "labels": "{postfix = \"\"}"
 #     }
 #   ]
@@ -26,8 +26,8 @@ sshkey_folder: /home/justin-p/.ssh/
 
 host_list: {
   digitalocean: [
-    { "name": "test01",
-      "tag": "[\"ansible\"]"
+    { "name": "host01",
+      "tags": "[\"ansible\"]"
     },
   ]
 }
