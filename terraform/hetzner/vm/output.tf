@@ -1,3 +1,3 @@
-output "vms" {
-  value = hcloud_server.main[*]
+output "vm" {
+  value = hcloud_server.main
 }

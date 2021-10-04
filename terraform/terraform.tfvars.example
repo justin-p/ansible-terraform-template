@@ -1,0 +1,25 @@
+hetzner_token      = ""
+digitalocean_token = ""
+
+project_name      = "testing"
+root_ssh_key_path = "/home/justin-p/.ssh/temp_key"
+
+digitalocean_enabled = false
+digitalocean_servers = {
+  "host01" = {
+    tags  = ["web"]
+    name = "host01"
+  },
+  "host02" = {
+    tags  = ["web"]
+    name = "host02"
+  }  
+}
+
+hetzner_enabled = false
+hetzner_servers = {
+  "host03" = {
+    labels = { mail = "" }
+    name   = "host03"
+  }
+}
