@@ -6,11 +6,11 @@ Currently this project supports 2 cloud providers, `digitalocean` and `hetzner`.
 Intended to be a quick 'grab and go' for cases where:
 
 - You quickly need a cloud VM with some barebones config.
-- You want to test/build a Ansible playbook/role against a cloud provider VM.
+- You want to test/build a Ansible playbook/role against a cloud provider.
 
-This can also be used as a template/basis for cases where:
+This can also be used as a template for cases where:
 
-- You want to build a project that can spin up specific set of infra whenever you need it.
+- You want to build a project that can consently spin up and configure the same specific set of infrastructure whenever you need it.
 
 ## Setup
 
@@ -34,7 +34,7 @@ Now you can run:
 - `ansible-playbook ansible/main.yml` to apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
 - `ansible-playbook ansible/main.yml --tags=destroy` to destroy the server at the current configured cloud provider.
 
-**NOTE:** The template is *not* smart enough to know if you have switch cloud providers between runs and not have removed the previous deployed VM. It only removes VMs on cloud providers that are *currently* configured in the `host_list` variable. Don't blame me if you get large bills because you forgot that you had a VM deployed :) Make sure to remove the VMs before you remove/disable a provider in the `host_list` variable.
+**NOTE:** The template is smart enough to know if you made changes to the infrastructure variable. It only keeps VMs on cloud providers that are *currently* configured in the `host_list` variable. It will however *not* configure new servers with the bootstrap playblook if you did not supply the `create` tag on the `ansible-playbook` command.
 
 #### Your extra tasks
 
@@ -88,14 +88,16 @@ Thus in our ansible code we define a play against the the ansible group `web` to
 ```yaml
 ---
 - hosts: web
-   vars:
-     ansible_user: "{{ root_username }}"
-     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  vars_file:
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
-   tasks:
-     - name: Configure our webhosts
-       ansible.builtin.import_tasks: tasks/web_tasks.yml
-       tags: always
+  tasks:
+    - name: Configure our webhosts
+      ansible.builtin.import_tasks: tasks/web_tasks.yml
+      tags: always
 ```
 
 ##### Example 2
@@ -134,9 +136,11 @@ Since both hosts are added to the web group in our inventory we don't need to up
 ```yaml
 ---
 - hosts: web
-   vars:
-     ansible_user: "{{ root_username }}"
-     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  vars_file:
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
    tasks:
      - name: Configure our webhosts
@@ -185,9 +189,11 @@ In our ansible code we would define a additional play against the the ansible gr
 ```yaml
 ---
 - hosts: web
-   vars:
-     ansible_user: "{{ root_username }}"
-     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  vars_file:
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
    tasks:
      - name: Configure our webhosts
@@ -195,9 +201,11 @@ In our ansible code we would define a additional play against the the ansible gr
        tags: always
 
 - hosts: db
-   vars:
-     ansible_user: "{{ root_username }}"
-     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  vars_file:
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
    tasks:
      - name: Configure our database hosts
@@ -266,9 +274,11 @@ In our ansible code we would define a additional play against the the ansible gr
 ```yaml
 ---
 - hosts: web
-   vars:
-     ansible_user: "{{ root_username }}"
-     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  vars_file:
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
    tasks:
      - name: Configure our webhosts
@@ -276,9 +286,11 @@ In our ansible code we would define a additional play against the the ansible gr
        tags: always
 
 - hosts: db
-   vars:
-     ansible_user: "{{ root_username }}"
-     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  vars_file:
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
    tasks:
      - name: Configure our database hosts
@@ -286,9 +298,11 @@ In our ansible code we would define a additional play against the the ansible gr
        tags: always
 
 - hosts: mail
-   vars:
-     ansible_user: "{{ root_username }}"
-     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
+  vars_file:
+    - "{{ playbook_dir }}/defaults/template_info.yml"
+  vars:
+    ansible_user: "{{ root_username }}"
+    ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
    tasks:
      - name: Configure our mail hosts
@@ -298,13 +312,13 @@ In our ansible code we would define a additional play against the the ansible gr
 
 ### Terraform (optional)
 
-If you want to work on the terraform project files themselves outside of ansible, create a copy of the `terraform.tfvars.example` file and fill in the token variable with your API key.
+If you want to work on the terraform code itself outside of ansible, create a copy of the `terraform.tfvars.example` file, fill in the token variables with your API's key and setup the server maps.
 
 ```bash
-cp terraform.tfvars.example terraform.tfvars 
+cp terraform/terraform.tfvars.example terraform/terraform.tfvars 
 ```
 
-**NOTE:** The ansible playbook also creates/overwrites `terraform.tfvars` files for you. In that case just verify if the API keys match and setup the tfvars file as you would like.
+**NOTE:** Do note that the ansible playbook also creates ***and*** overwrites the `terraform.tfvars` file on each run. 
 
 Then `cd` to the terraform project folder and run terraform as usual.
 
