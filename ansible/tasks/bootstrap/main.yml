@@ -23,7 +23,7 @@
   ansible.builtin.include_role:
     name: robertdebock.update
   vars:
-    update_reboot: false
+    update_reboot: false # Using a custom reboot with `post_reboot_delay` seems to help avoid hetzner reboot issues (stuck waiting for reboot).
 
 - name: Run 'robertdebock.firewall'-role
   ansible.builtin.include_role:
@@ -32,12 +32,9 @@
     firewall_services:
       - name: ssh
 
-- name: Run 'robertdebock.hostname'-role
-  ansible.builtin.include_role:
-    name: robertdebock.hostname
-  vars:
-    hostname: "{{ server_hostname }}"
-    hostname_reboot: true
+- name: Reboot to apply role changes
+  ansible.builtin.reboot:
+    post_reboot_delay: 10
 
-- name: Flush handlers triggerd turing bootstrap
-  meta: flush_handlers
+- name: Flush handlers triggered turing bootstrap
+  ansible.builtin.meta: flush_handlers

@@ -3,58 +3,42 @@
   gather_facts: false
 
   vars_files:
-    - "{{ playbook_dir }}/../../vars/main.yml"
     - "{{ playbook_dir }}/../../defaults/template_info.yml"
     - "{{ playbook_dir }}/../../defaults/secrets.yml"
 
   pre_tasks:
-    - name: Ensure needed ssh keys are created.
+    - name: Ensure needed ssh keys are created
       community.crypto.openssh_keypair:
-        path: "{{ sshkey_folder }}/{{ item }}-{{ vps_name }}"
+        path: "{{ sshkey_folder }}/{{ item }}-{{ project_name }}"
       with_items:
         - "{{ root_username }}"
 
-    - name: "Ensure {{ sshkey_folder }}/known_hosts exists"
-      ansible.builtin.copy:
-        content: ""
-        dest: "{{ sshkey_folder }}/known_hosts"
-        force: false
-        mode: 0664
-
-    - name: "Ensure 'terraform.tfvars' template is deployed"
+    - name: Ensure 'terraform.tfvars' template is deployed
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/../../templates/{{ _cloud_provider }}_terraform.tfvars.j2"
-        dest: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm/terraform.tfvars"
+        src: "{{ playbook_dir }}/../../templates/terraform.tfvars.j2"
+        dest: "{{ playbook_dir }}/../../../terraform/terraform.tfvars"
 
   tasks:
-    - name: Ensure host is deployed with terraform on {{ _cloud_provider }}.
+    - name: Run terraform to create infrastructure
       community.general.terraform:
-        project_path: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm"
-        variables_files: "{{ playbook_dir }}/../../../terraform/{{ _cloud_provider }}/single_vm/terraform.tfvars"
+        project_path: "{{ playbook_dir }}/../../../terraform/"
+        variables_files: "{{ playbook_dir }}/../../../terraform/terraform.tfvars"
         force_init: true
       register: terraform_infra
+      when: host_list is defined
 
-    - name: Add deployed host to ansible inventory.
+    - name: Add each deployed digitalocean host to ansible inventory
       ansible.builtin.add_host:
-        hostname: "{{ terraform_infra.outputs.vps_ipv4_address.value }}"
-        groups: group_1
+        hostname: "{{ item.value['vm'][0]['ipv4_address'] }}"
+        groups: "{{ item.value['vm'][0]['tags'] }}"
       changed_when: false
+      with_dict: "{{ terraform_infra.outputs['digitalocean_vms'].value }}"
+      when: terraform_infra.outputs['digitalocean_vms'].value['you_should_never_use_this_host_name']['vm'] is not defined
 
-    - name: Scan ~/.ssh/known_host file for a entry of {{ terraform_infra.outputs.vps_ipv4_address.value }}
-      ansible.builtin.command: ssh-keygen -H -F {{ terraform_infra.outputs.vps_ipv4_address.value }}
-      delegate_to: localhost
-      register: keygen_scan
-      changed_when: '"found: line" in keygen_scan.stdout'
-      failed_when:
-        - keygen_scan.rc != 0 and keygen_scan.rc != 1
-
-    - name: Remove {{ terraform_infra.outputs.vps_ipv4_address.value }} from SSH known hosts if it was found.
-      ansible.builtin.command: ssh-keygen -R {{ terraform_infra.outputs.vps_ipv4_address.value }}
-      delegate_to: localhost
-      register: keygen_remove
-      when: '"found: line" in keygen_scan.stdout'
-
-    - name: Add {{ terraform_infra.outputs.vps_ipv4_address.value }} to SSH known hosts.
-      ansible.builtin.shell: ssh-keyscan -H {{ terraform_infra.outputs.vps_ipv4_address.value }} >> ~/.ssh/known_hosts
-      delegate_to: localhost
-      changed_when: true
+    - name: Add each deployed hetzner host to ansible inventory
+      ansible.builtin.add_host:
+        hostname: "{{ item.value['vm'][0]['ipv4_address'] }}"
+        groups: "{{ item.value['vm'][0]['labels'].keys() }}"
+      changed_when: false
+      with_dict: "{{ terraform_infra.outputs['hetzner_vms'].value }}"
+      when: terraform_infra.outputs['hetzner_vms'].value['you_should_never_use_this_host_name']['vm'] is not defined
