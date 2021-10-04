@@ -38,9 +38,9 @@ Now you can run:
 
 #### Your extra tasks
 
-If you require additional tasks to be ran after initial configuration you can add those into `ansible/tasks/main.yml`.
+If you require additional tasks to be ran after initial configuration you can add those directly into `ansible/main.yml` or split them out to separate tasks files such as `ansible/tasks/main.yml`.
 
-If your tasks require additional roles you can let them be automatically installed by adding them to the `ansible/files/requirements.yml` file. This will install theses roles to the `ansible/roles` folder.
+If your tasks require additional roles you can have them be automatically installed by adding them to the `ansible/files/requirements.yml` file. This will install these roles to the `ansible/roles` folder.
 
 If you want to setup variables for your tasks add these to the `ansible/defaults/main.yml` file.
 
@@ -81,9 +81,9 @@ locals {
 }
 ```
 
-Terraform also adds tags/lables to the deployed hosts on the cloud provider. In this case we added a tag to `web01` called `web`. These tags/lables are used by Ansible to add the specific host to an inventory groups that matches the tag/label. Meaning you can easily add host to specific groups while the inventory is still dynamically build based off Terraform output.
+Terraform also adds tags/lables to the deployed hosts on the cloud provider. In this case we added a tag to `web01` called `web`. These tags/lables are used by Ansible to add the specific host to an inventory groups that matches the tag/label. Meaning you can easily add host to specific groups while the inventory is still being dynamically build in memory based off Terraform output.
 
-Thus in our ansible code we define a play against the the ansible group `web` to configure our web host.
+Thus in the ansible code we define a play against the ansible `web` group to configure the web host.
 
 ```yaml
 ---
@@ -117,7 +117,7 @@ host_list: {
 }
 ```
 
-Since we have not defined any other values on both the hosts the missing values will still use their default settings as show below: 
+Since we have not defined any other values on both the hosts, the missing values will still use their default settings as show below: 
 
 ```terraform
 locals {
@@ -184,7 +184,7 @@ locals {
 }
 ```
 
-In our ansible code we would define a additional play against the the ansible group `db` to configure our database host.
+In the ansible code we would define a additional play against the ansible `db` group to configure the database host.
 
 ```yaml
 ---
@@ -269,7 +269,7 @@ locals {
 }
 ```
 
-In our ansible code we would define a additional play against the the ansible group `mail` to configure our mail servers.
+In the ansible code we define a additional play against the the ansible `mail` group to configure the mail servers.
 
 ```yaml
 ---
