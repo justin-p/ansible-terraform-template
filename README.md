@@ -318,7 +318,7 @@ If you want to work on the terraform code itself outside of ansible, create a co
 cp terraform/terraform.tfvars.example terraform/terraform.tfvars 
 ```
 
-**NOTE:** Do note that the ansible playbook also creates ***and*** overwrites the `terraform.tfvars` file on each run. 
+**NOTE:** The ansible playbook also creates ***and*** overwrites the `terraform.tfvars` file on each run. 
 
 Then `cd` to the terraform project folder and run terraform as usual.
 
