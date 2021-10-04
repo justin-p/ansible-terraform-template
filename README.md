@@ -34,7 +34,7 @@ Now you can run:
 - `ansible-playbook ansible/main.yml` to apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
 - `ansible-playbook ansible/main.yml --tags=destroy` to destroy the server at the current configured cloud provider.
 
-**NOTE:** The template is smart enough to know if you made changes to the infrastructure variable. It only keeps VMs on cloud providers that are *currently* configured in the `host_list` variable. It will however *not* configure new servers with the bootstrap playblook if you did not supply the `create` tag on the `ansible-playbook` command.
+**NOTE:** The template is smart enough to know if you made changes to the infrastructure variable. It only keeps VMs on cloud providers that are *currently* configured in the `host_list` variable. VMs that are no longer listed in the `host_list` variable are automaticlly destroyed and new ones will automaticlly be created. It will however *not* configure the new servers with the bootstrap playblook if you did not supply the `create` tag on the `ansible-playbook` command.
 
 #### Your extra tasks
 
