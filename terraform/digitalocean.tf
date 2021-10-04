@@ -51,7 +51,7 @@ module "digitalocean_ssh_key" {
   module_enabled = var.digitalocean_enabled
 
   root_username     = var.root_username
-  root_ssh_key_path = var.root_ssh_key_path  
+  root_ssh_key_path = var.root_ssh_key_path
 }
 
 module "digitalocean_vm" {
@@ -59,11 +59,16 @@ module "digitalocean_vm" {
   module_enabled = var.digitalocean_enabled
   for_each       = local.digitalocean_servers
 
-  server_image              = each.value.image
-  server_tags               = each.value.tags
+  project_name      = var.project_name
+  root_username     = var.root_username
+  root_ssh_key_path = var.root_ssh_key_path
+
   server_name               = each.value.name
-  server_region             = each.value.region
+  server_tags               = each.value.tags
   server_size               = each.value.size
+  server_image              = each.value.image
+  server_region             = each.value.region
+  
   server_ipv6               = each.value.ipv6
   server_monitoring         = each.value.monitoring
   server_private_networking = each.value.private_networking

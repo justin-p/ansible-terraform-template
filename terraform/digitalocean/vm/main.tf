@@ -18,7 +18,6 @@ resource "digitalocean_droplet" "main" {
   monitoring         = var.server_monitoring
   private_networking = var.server_private_networking
   ssh_keys           = var.server_ssh_keys
-  #ssh_keys           = [digitalocean_ssh_key.main.fingerprint]
 }
 
 resource "null_resource" "ssh_check" {   # Ensure that SSH is ready and accepting connections on all hosts.

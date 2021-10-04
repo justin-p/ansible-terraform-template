@@ -1,25 +1,24 @@
-hetzner_token      = ""
-digitalocean_token = ""
-
 project_name      = "testing"
-root_ssh_key_path = "/home/justin-p/.ssh/temp_key"
+root_ssh_key_path = "/home/justin-p/.ssh//root-testing"
 
-digitalocean_enabled = false
+digitalocean_token   = ""
+digitalocean_enabled = true
 digitalocean_servers = {
   "host01" = {
-    tags  = ["web"]
+    tags = ["nginx"]
     name = "host01"
   },
   "host02" = {
-    tags  = ["web"]
+    tags = ["mysql"]
     name = "host02"
-  }  
+  }
 }
 
-hetzner_enabled = false
+hetzner_token   = ""
+hetzner_enabled = true
 hetzner_servers = {
   "host03" = {
-    labels = { mail = "" }
+    labels = { postfix = "" }
     name   = "host03"
   }
 }
