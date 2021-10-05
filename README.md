@@ -175,14 +175,21 @@ Since both hosts are added to the web group in our inventory we don't need to up
 - hosts: web
   vars_file:
     - "{{ playbook_dir }}/defaults/template_info.yml"
+
   vars:
     ansible_user: "{{ root_username }}"
     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
- 
-   tasks:
-     - name: Configure our webhosts
-       ansible.builtin.import_tasks: tasks/web_tasks.yml
-       tags: always
+
+  tasks:
+    - name: Configure our webhosts
+      ansible.builtin.import_tasks: tasks/web_tasks.yml
+      tags: always
+      when:
+        - "'tfvars' not in ansible_run_tags"
+        - "'destroy' not in ansible_run_tags"
+        - "'roles' not in ansible_run_tags"
+        - "'bootstrap' not in ansible_run_tags"
+        - "'print_inventory' not in ansible_run_tags"
 ```
 
 ##### Example 3
@@ -236,10 +243,16 @@ In the ansible code we would define a additional play against the ansible `db` g
     ansible_user: "{{ root_username }}"
     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
-   tasks:
-     - name: Configure our webhosts
-       ansible.builtin.import_tasks: tasks/web_tasks.yml
-       tags: always
+  tasks:
+    - name: Configure our webhosts
+      ansible.builtin.import_tasks: tasks/web_tasks.yml
+      tags: always
+      when:
+        - "'tfvars' not in ansible_run_tags"
+        - "'destroy' not in ansible_run_tags"
+        - "'roles' not in ansible_run_tags"
+        - "'bootstrap' not in ansible_run_tags"
+        - "'print_inventory' not in ansible_run_tags"
 
 - hosts: db
   vars_file:
@@ -248,10 +261,16 @@ In the ansible code we would define a additional play against the ansible `db` g
     ansible_user: "{{ root_username }}"
     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
-   tasks:
-     - name: Configure our database hosts
-       ansible.builtin.import_tasks: tasks/database_tasks.yml
-       tags: always
+  tasks:
+    - name: Configure our database hosts
+      ansible.builtin.import_tasks: tasks/database_tasks.yml
+      tags: always
+      when:
+        - "'tfvars' not in ansible_run_tags"
+        - "'destroy' not in ansible_run_tags"
+        - "'roles' not in ansible_run_tags"
+        - "'bootstrap' not in ansible_run_tags"
+        - "'print_inventory' not in ansible_run_tags"
 ```
 
 ##### Example 4
@@ -341,10 +360,16 @@ In the ansible code we define a additional play against the the ansible `mail` g
     ansible_user: "{{ root_username }}"
     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
-   tasks:
-     - name: Configure our webhosts
-       ansible.builtin.import_tasks: tasks/web_tasks.yml
-       tags: always
+  tasks:
+    - name: Configure our webhosts
+      ansible.builtin.import_tasks: tasks/web_tasks.yml
+      tags: always
+      when:
+        - "'tfvars' not in ansible_run_tags"
+        - "'destroy' not in ansible_run_tags"
+        - "'roles' not in ansible_run_tags"
+        - "'bootstrap' not in ansible_run_tags"
+        - "'print_inventory' not in ansible_run_tags"
 
 - hosts: db
   vars_file:
@@ -353,10 +378,16 @@ In the ansible code we define a additional play against the the ansible `mail` g
     ansible_user: "{{ root_username }}"
     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
-   tasks:
-     - name: Configure our database hosts
-       ansible.builtin.import_tasks: tasks/database_tasks.yml
-       tags: always
+  tasks:
+    - name: Configure our database hosts
+      ansible.builtin.import_tasks: tasks/database_tasks.yml
+      tags: always
+      when:
+        - "'tfvars' not in ansible_run_tags"
+        - "'destroy' not in ansible_run_tags"
+        - "'roles' not in ansible_run_tags"
+        - "'bootstrap' not in ansible_run_tags"
+        - "'print_inventory' not in ansible_run_tags"
 
 - hosts: mail
   vars_file:
@@ -365,11 +396,17 @@ In the ansible code we define a additional play against the the ansible `mail` g
     ansible_user: "{{ root_username }}"
     ansible_ssh_private_key_file: "{{ root_private_key_path }}"
  
-   tasks:
-     - name: Configure our mail hosts
-       ansible.builtin.import_tasks: tasks/mail_tasks.yml
-       tags: always       
-```
+  tasks:
+    - name: Configure our mail hosts
+      ansible.builtin.import_tasks: tasks/mail_tasks.yml
+      tags: always
+      when:
+        - "'tfvars' not in ansible_run_tags"
+        - "'destroy' not in ansible_run_tags"
+        - "'roles' not in ansible_run_tags"
+        - "'bootstrap' not in ansible_run_tags"
+        - "'print_inventory' not in ansible_run_tags"
+ ```
 
 ### Terraform (optional)
 
