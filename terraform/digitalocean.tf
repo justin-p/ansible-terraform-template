@@ -30,7 +30,7 @@ variable "digitalocean_servers" {
   }
 }
 
-## Default values if incomplete server map is supplied
+## default values if incomplete server map is supplied
 locals {
   digitalocean_servers = defaults(var.digitalocean_servers, {
     size          = "s-1vcpu-1gb"
@@ -41,7 +41,9 @@ locals {
     ipv6          = false
     resize_disk   = true
     droplet_agent = false
-    create_vpc    = true
+    create_vpc    = true # will create a VPC for each droplet
+                         # is set to true by default to avoid a server from using the default regions VPC
+                         # if you your project requires multiple droplets in the same VPC please update the terraform code manually
   })
 
   # if the digitalocean modules are disabled, set digitalocean_ssh_key to a empty value
