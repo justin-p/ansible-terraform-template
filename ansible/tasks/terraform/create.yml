@@ -29,7 +29,8 @@
 
     - name: Add each deployed digitalocean host to ansible inventory
       ansible.builtin.add_host:
-        hostname: "{{ item.value['vm'][0]['ipv4_address'] }}"
+        hostname: "{{ item.value['vm'][0]['name'] }}"
+        ansible_host: "{{ item.value['vm'][0]['ipv4_address'] }}"
         groups: "{{ item.value['vm'][0]['tags'] }}"
       changed_when: false
       with_dict: "{{ terraform_infra.outputs['digitalocean_vms'].value }}"
@@ -37,7 +38,8 @@
 
     - name: Add each deployed hetzner host to ansible inventory
       ansible.builtin.add_host:
-        hostname: "{{ item.value['vm'][0]['ipv4_address'] }}"
+        hostname: "{{ item.value['vm'][0]['name'] }}"      
+        ansible_host: "{{ item.value['vm'][0]['ipv4_address'] }}"
         groups: "{{ item.value['vm'][0]['labels'].keys() }}"
       changed_when: false
       with_dict: "{{ terraform_infra.outputs['hetzner_vms'].value }}"

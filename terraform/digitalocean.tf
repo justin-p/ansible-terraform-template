@@ -11,7 +11,7 @@ variable "digitalocean_enabled" {
 variable "digitalocean_servers" {
   description = "A map contaning server(s) that should be created."
   type = map(object({
-    name               = string
+    hostname           = optional(string)
     size               = optional(string)
     tags               = list(string)
     image              = optional(string)
@@ -22,7 +22,6 @@ variable "digitalocean_servers" {
   }))
   default = {
     "host1" = {
-      name = "host1"
       tags = ["terraform"]
     }
   }
@@ -59,11 +58,10 @@ module "digitalocean_vm" {
   module_enabled = var.digitalocean_enabled
   for_each       = local.digitalocean_servers
 
-  project_name      = var.project_name
   root_username     = var.root_username
   root_ssh_key_path = var.root_ssh_key_path
 
-  server_name               = each.value.name
+  server_hostname           = each.value.hostname
   server_tags               = each.value.tags
   server_size               = each.value.size
   server_image              = each.value.image

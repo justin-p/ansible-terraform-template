@@ -16,7 +16,7 @@ digitalocean_servers = {
 {% endif %}
 {% if 'image' in dict_item %}    image = "{{dict_item['image']}}"
 {% endif %}
-{% if 'name' in dict_item %}    name = "{{dict_item['name']}}"
+{% if 'hostname' in dict_item %}    hostname = "{{dict_item['hostname']}}"
 {% endif %}
 {% if 'region' in dict_item %}    region = "{{dict_item['region']}}"
 {% endif %}
@@ -56,7 +56,7 @@ hetzner_servers = {
 {% endif %}
 {% if 'image' in dict_item %}    image = "{{dict_item['image']}}"
 {% endif %}
-{% if 'name' in dict_item %}    name = "{{dict_item['name']}}"
+{% if 'hostname' in dict_item %}    hostname = "{{dict_item['hostname']}}"
 {% endif %}
 {% if 'location' in dict_item %}    location = "{{dict_item['location']}}"
 {% endif %}

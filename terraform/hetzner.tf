@@ -11,7 +11,7 @@ variable "hetzner_enabled" {
 variable "hetzner_servers" {
   description = "A map contaning server(s) that should be created."
   type = map(object({
-    name        = string
+    hostname    = optional(string)
     server_type = optional(string)
     labels      = map(string)
     image       = optional(string)
@@ -20,7 +20,6 @@ variable "hetzner_servers" {
   }))
   default = {
     "host1" = {
-      name   = "host1"
       labels = { terraform = "" }
     }
   }
@@ -57,16 +56,15 @@ module "hetzner_vm" {
   module_enabled = var.hetzner_enabled
   for_each       = local.hetzner_servers
 
-  project_name      = var.project_name
   root_username     = var.root_username
   root_ssh_key_path = var.root_ssh_key_path
 
-  server_name        = each.value.name
+  server_hostname    = each.value.hostname
   server_labels      = each.value.labels
   server_server_type = each.value.server_type
   server_image       = each.value.image
   server_location    = each.value.location
-  
+
   server_backups     = each.value.backups
   server_ssh_keys    = [local.hetzner_ssh_key]
 }

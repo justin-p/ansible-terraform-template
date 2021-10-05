@@ -7,8 +7,8 @@ variable "project_name" {
   default = "testing"
 }
 
-variable "server_name" {
-  default = "host1"
+variable "server_hostname" {
+  default = null
 }
 
 variable "server_image" {
