@@ -3,6 +3,10 @@ variable "module_enabled" {
   default = false
 }
 
+variable "server_dns_ptr" {
+  default = null
+}
+
 variable "project_name" {
   default = "testing"
 }
