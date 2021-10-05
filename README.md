@@ -36,7 +36,7 @@ Now you can run:
 
 Other additional tags are:
 
-- `ansible-playbook ansible/main.yml --tags=tfvars` to only create the `terraform.tfvars` file. Use full if you want to work on the [Terraform code](#terraform-optional).
+- `ansible-playbook ansible/main.yml --tags=tfvars` to only create the `terraform.tfvars` file. Useful if you want to work on the [Terraform code](#terraform-optional).
 - `ansible-playbook ansible/main.yml --tags=roles` to only instal ansible roles locally.
 - `ansible-playbook ansible/main.yml --tags=bootstrap` to only run the bootstrap tasks.
 
