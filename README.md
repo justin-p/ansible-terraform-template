@@ -72,11 +72,15 @@ Since not all terraform values are defined for the VM in the `host_list` variabl
 ```terraform
 locals {
   digitalocean_servers = defaults(var.digitalocean_servers, {
-    size               = "s-1vcpu-1gb"
-    image              = "ubuntu-20-04-x64"
-    region             = "ams3"
-    monitoring         = false
-    private_networking = false
+    size          = "s-1vcpu-1gb"
+    image         = "ubuntu-20-04-x64"
+    region        = "ams3"
+    backups       = false
+    monitoring    = false
+    ipv6          = false
+    resize_disk   = true
+    droplet_agent = false
+    create_vpc    = true
   })
 }
 ```
@@ -122,11 +126,15 @@ Since we have not defined any other values on both the hosts, the missing values
 ```terraform
 locals {
   digitalocean_servers = defaults(var.digitalocean_servers, {
-    size               = "s-1vcpu-1gb"
-    image              = "ubuntu-20-04-x64"
-    region             = "ams3"
-    monitoring         = false
-    private_networking = false
+    size          = "s-1vcpu-1gb"
+    image         = "ubuntu-20-04-x64"
+    region        = "ams3"
+    backups       = false
+    monitoring    = false
+    ipv6          = false
+    resize_disk   = true
+    droplet_agent = false
+    create_vpc    = true
   })
 }
 ```
@@ -175,11 +183,15 @@ All the other values that are missing on each host will again use their default 
 ```terraform
 locals {
   digitalocean_servers = defaults(var.digitalocean_servers, {
-    size               = "s-1vcpu-1gb"
-    image              = "ubuntu-20-04-x64"
-    region             = "ams3"
-    monitoring         = false
-    private_networking = false
+    size          = "s-1vcpu-1gb"
+    image         = "ubuntu-20-04-x64"
+    region        = "ams3"
+    backups       = false
+    monitoring    = false
+    ipv6          = false
+    resize_disk   = true
+    droplet_agent = false
+    create_vpc    = true
   })
 }
 ```
@@ -267,11 +279,15 @@ All the missing values will again use their default settings as show below:
 ```terraform
 locals {
   digitalocean_servers = defaults(var.digitalocean_servers, {
-    size               = "s-1vcpu-1gb"
-    image              = "ubuntu-20-04-x64"
-    region             = "ams3"
-    monitoring         = false
-    private_networking = false
+    size          = "s-1vcpu-1gb"
+    image         = "ubuntu-20-04-x64"
+    region        = "ams3"
+    backups       = false
+    monitoring    = false
+    ipv6          = false
+    resize_disk   = true
+    droplet_agent = false
+    create_vpc    = true
   })
 }
 
