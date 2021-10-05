@@ -30,7 +30,7 @@ variable "digitalocean_servers" {
   }
 }
 
-## Default values if incompleet server map is supplied
+## Default values if incomplete server map is supplied
 locals {
   digitalocean_servers = defaults(var.digitalocean_servers, {
     size          = "s-1vcpu-1gb"
