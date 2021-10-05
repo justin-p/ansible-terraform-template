@@ -27,7 +27,7 @@ variable "hetzner_servers" {
 }
 
 locals {
-  # default values if incompleet server map is supplied
+  # default values if incomplete server map is supplied
   hetzner_servers = defaults(var.hetzner_servers, {
     server_type = "cx11"
     image       = "ubuntu-20.04"
