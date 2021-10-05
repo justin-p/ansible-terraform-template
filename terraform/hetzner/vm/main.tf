@@ -18,13 +18,7 @@ locals {
       # if server_hostname is null (which is the default value), generate a random hostname with random_pet and random_string
   # else set it server_hostname to disabled
   server_hostname = var.module_enabled == true ? (var.server_hostname != null ? var.server_hostname : "${random_pet.name[0].id}-${random_string.name[0].result}") : "disabled" # [0] selector is required due the `count = var.module_enabled` trick.
-  
-  # if server_dns_ptr is null (which is the default value), disable the PTR creation
-  # else set local.dns_ptr
-  module_ptr_enabled = var.server_dns_ptr == null ? false : true
-  dns_ptr            = var.server_dns_ptr == null ? 0 : var.server_dns_ptr
 }
-
 
 resource "hcloud_server" "main" {
   count = var.module_enabled ? 1 : 0 # only run if this variable is true
@@ -51,12 +45,4 @@ resource "null_resource" "ssh_check" { # ensure that SSH is ready and accepting 
   provisioner "remote-exec" {
     inline = ["echo 'Hello world!'"]
   }
-}
-
-resource "hcloud_rdns" "main" {
-  count = local.module_ptr_enabled ? 1 : 0 # only run if this variable is true
-
-  server_id  = hcloud_server.main[0].id
-  ip_address = hcloud_server.main[0].ipv4_address
-  dns_ptr    = local.dns_ptr
 }
