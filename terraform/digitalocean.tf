@@ -42,7 +42,7 @@ locals {
     resize_disk   = true
     droplet_agent = false
     create_vpc    = true # will create a VPC for each droplet
-                         # is set to true by default to avoid a server from using the default regions VPC
+                         # is set to true by default to avoid a server from using the default regions VPC and the fact that you can't disable the default VPC.
                          # if you your project requires multiple droplets in the same VPC please update the terraform code manually
   })
 
