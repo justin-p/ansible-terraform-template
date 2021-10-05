@@ -118,7 +118,7 @@ locals {
 
 **NOTE:** Terraform also adds tags/lables to the deployed hosts on the cloud provider. In this case we added a tag to `web01` called `web`. These tags/lables are used by Ansible to add the specific host to an inventory groups that matches the tag/label. Meaning you can easily add host to specific groups while the inventory is still being dynamically build in memory based off Terraform output.
 
-**NOTE:** By default we create a VPC for each droplet on digitalocean. This is to avoid all the droplets ending up in the same default VPC for that region. The template does *not* support creating multiple droplets in a custom VPC.
+**NOTE:** By default we create a VPC for each droplet on digitalocean. This is to avoid all the droplets ending up in the same default VPC for that region. The template does *not* support adding multiple droplets in a single custom VPC.
 
 Thus in the ansible code we define a play against the ansible `web` group to configure the web host.
 
