@@ -10,7 +10,7 @@ Intended to be a quick 'grab and go' for cases where:
 
 This can also be used as a template for cases where:
 
-- You want to build a project that can consently spin up and configure the same specific set of infrastructure whenever you need it.
+- You want to build a project that can consistently spin up and configure the same specific set of infrastructure whenever you need it.
 
 ## Setup
 
@@ -22,7 +22,7 @@ Copy the example `template_info.example.yml` file and add the edit the informati
 cp ansible/defaults/template_info.example.yml ansible/defaults/template_info.yml 
 ```
 
-Copy the example `secrets.example.yml` file and add the your cloud provder API key('s).
+Copy the example `secrets.example.yml` file and add the your cloud provider API key('s).
 
 ```bash
 cp ansible/defaults/secrets.example.yml ansible/defaults/secrets.yml 
@@ -30,11 +30,40 @@ cp ansible/defaults/secrets.example.yml ansible/defaults/secrets.yml
 
 Now you can run:
 
-- `ansible-playbook ansible/main.yml --tags=create` to create, bootstrap and apply your task to the server created server (if any are defined in `ansible/tasks/main.yml`).
-- `ansible-playbook ansible/main.yml` to apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
-- `ansible-playbook ansible/main.yml --tags=destroy` to destroy the server at the current configured cloud provider.
+- `ansible-playbook ansible/main.yml --tags=create` to create the infrastructure, install ansible roles locally, bootstrap the created servers and apply your task (if any are defined in `ansible/tasks/main.yml`).
+- `ansible-playbook ansible/main.yml` to only apply your task to the server (if any are defined in `ansible/tasks/main.yml`).
+- `ansible-playbook ansible/main.yml --tags=destroy` to destroy the infrastructure deployed by terraform.
 
-**NOTE:** The template is smart enough to know if you made changes to the infrastructure variable. It only keeps VMs on cloud providers that are *currently* configured in the `host_list` variable. VMs that are no longer listed in the `host_list` variable are automaticlly destroyed and new ones will automaticlly be created. It will however *not* configure the new servers with the bootstrap playblook if you did not supply the `create` tag on the `ansible-playbook` command.
+Other additional tags are:
+
+- `ansible-playbook ansible/main.yml --tags=tfvars` to only create the 'terraform.tfvars' file. Use full if you want to work on the [Terraform code](#terraform-optional).
+- `ansible-playbook ansible/main.yml --tags=roles` to only instal ansible roles locally.
+- `ansible-playbook ansible/main.yml --tags=bootstrap` to only run the bootstrap tasks.
+
+**NOTE:** The template is smart enough to know if you made changes to the infrastructure variable (`host_list`). It only keeps VMs on cloud providers that are *currently* configured in the `host_list` variable. VMs that are no longer listed in the `host_list` variable are automatically destroyed and new ones will automatically be created. It will however *not* configure the new servers with the bootstrap playbook if you did not supply the `create` or the `bootstrap` tag on the `ansible-playbook` command.
+
+#### Ansible Vault (Optional)
+
+To avoid having clear text API tokens linger on disk you can encrypt the `ansible/defaults/secrets.yml` with `ansible-vault`. The following example will allow you to setup a passphrase before you are able to use `ansible/defaults/secrets.yml`.
+
+```bash
+ansible-vault encrypt ansible/defaults/secrets.yml
+```
+
+Then from this point onward I would recommend you add the `--ask-vault-pass` flag to the ansible commands.
+
+```bash
+$ ansible-playbook ansible/main.yml --ask-vault-pass --tags=create
+Vault password: 
+```
+
+If you ever need to edit the API tokens in `ansible/defaults/secrets.yml` you can do so with `ansible-vault edit`.
+
+```bash
+ansible-vault edit ansible/defaults/secrets.yml
+```
+
+For more information about ansible-vault [click here](https://docs.ansible.com/ansible/latest/user_guide/vault.html#using-encrypted-variables-and-files).
 
 #### Your extra tasks
 
@@ -121,7 +150,7 @@ host_list: {
 }
 ```
 
-Since we have not defined any other values on both the hosts, the missing values will still use their default settings as show below: 
+Since we have not defined any other values on both the hosts, the missing values will still use their default settings as show below:
 
 ```terraform
 locals {
@@ -178,7 +207,7 @@ host_list: {
 }
 ```
 
-All the other values that are missing on each host will again use their default settings as show below: 
+All the other values that are missing on each host will again use their default settings as show below:
 
 ```terraform
 locals {
@@ -228,7 +257,7 @@ In the ansible code we would define a additional play against the ansible `db` g
 ##### Example 4
 
 The example below defines five hosts split on two different cloud providers. Our previous stack on digitalocean and two additional mail servers on hetzner.
-Here we also set more options on our VMs, such as hostnames, PTR, regions and images. 
+Here we also set more options on our VMs, such as hostnames, PTR, regions and images.
 
 ```yaml
 host_list: {
@@ -272,9 +301,9 @@ host_list: {
 }
 ```
 
-**NOTE:** Digitalocean PTRs are setup automaticlly ( by digitalocean themselfs ) to match the droplet hostname.
+**NOTE:** Digitalocean PTRs are setup automatically ( by digitalocean themselves ) to match the droplet hostname.
 
-All the missing values will again use their default settings as show below: 
+All the missing values will again use their default settings as show below:
 
 ```terraform
 locals {
@@ -344,13 +373,17 @@ In the ansible code we define a additional play against the the ansible `mail` g
 
 ### Terraform (optional)
 
-If you want to work on the terraform code itself outside of ansible, create a copy of the `terraform.tfvars.example` file, fill in the token variables with your API's key and setup the server maps.
+If you want to work on the terraform code itself outside of ansible, you want to setup the `terraform.tfvars`-file. You can deploy this file with the following `ansible-playbook` command:
+
+```bash
+ansible-playbook ansible/main.yml --tags=tfvars
+```
+
+Another options is to create a copy of the `terraform.tfvars.example` file, fill in the token variables with your API's key and setup the server maps manually.
 
 ```bash
 cp terraform/terraform.tfvars.example terraform/terraform.tfvars 
 ```
-
-**NOTE:** The ansible playbook also creates ***and*** overwrites the `terraform.tfvars` file on each run. 
 
 Then `cd` to the terraform project folder and run terraform as usual.
 
@@ -359,6 +392,8 @@ terraform init
 terraform apply
 terraform destroy
 ```
+
+**NOTE:** The ansible playbook creates, overwrites ***and*** deletes the `terraform.tfvars` file on each run. This is to ensure secrets such as API keys don't linger on disk whenever possible. Don't forget to use [ansible-vault](#ansible-vault-optional) if you care about this stuff 😉.
 
 ## License
 

@@ -6,8 +6,14 @@
     - "{{ playbook_dir }}/../../defaults/template_info.yml"
     - "{{ playbook_dir }}/../../defaults/secrets.yml"
 
+  pre_tasks:
+    - name: Ensure 'terraform.tfvars' template is deployed
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../../templates/terraform.tfvars.j2"
+        dest: "{{ playbook_dir }}/../../../terraform/terraform.tfvars"
+
   tasks:
-    - name: Ensure all host are destroyed with terraform
+    - name: Ensure infrastructure is destroyed with terraform
       community.general.terraform:
         project_path: "{{ playbook_dir }}/../../../terraform/"
         variables_files: "{{ playbook_dir }}/../../../terraform/terraform.tfvars"
@@ -20,5 +26,8 @@
       with_items:
         - "{{ root_username }}"
 
-    - name: Remove hosts from inventory
-      meta: refresh_inventory
+  post_tasks:
+    - name: Remove 'terraform.tfvars' file
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../../../terraform/terraform.tfvars"
+        state: absent

@@ -53,7 +53,7 @@ resource "digitalocean_droplet" "main" {
   vpc_uuid      = local.server_vpc
 }
 
-resource "null_resource" "ssh_check" {   # ensure that SSH is ready and accepting connections on all hosts.
+resource "null_resource" "is_server_ready_check" {   # ensure that SSH is ready, accepting connections and that cloud-init has finished.
   count = var.module_enabled ? 1 : 0 # only run if this variable is true
 
   connection {
@@ -65,5 +65,13 @@ resource "null_resource" "ssh_check" {   # ensure that SSH is ready and acceptin
 
   provisioner "remote-exec" {
     inline = ["echo 'Hello world!'"]
+  }
+
+  provisioner "local-exec" {
+    command = "while ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ${var.root_username}@${digitalocean_droplet.main[0].ipv4_address} -i ${var.root_ssh_key_path} 'ps aux | grep cloud-init | grep -v grep > /dev/null'; do echo 'Waiting for cloud-init to complete...'; sleep 10; done"
+  }
+
+  provisioner "local-exec" {
+    command = "while ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ${var.root_username}@${digitalocean_droplet.main[0].ipv4_address} -i ${var.root_ssh_key_path} 'ps aux | grep apt-get | grep -v grep > /dev/null'; do echo 'Waiting for apt-get to complete...'; sleep 10; done"
   }
 }
