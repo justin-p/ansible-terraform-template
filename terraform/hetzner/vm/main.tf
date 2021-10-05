@@ -57,7 +57,7 @@ resource "null_resource" "is_server_ready_check" {   # ensure that SSH is ready,
   }
 
   provisioner "local-exec" {
-    command = "while ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ${var.root_username}@${hcloud_server.main[0].ipv4_address} -i ${var.root_ssh_key_path} 'ps aux | grep apt-get | grep -v grep > /dev/null'; do echo 'Waiting for cloud-init to complete...'; sleep 10; done"
+    command = "while ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ${var.root_username}@${hcloud_server.main[0].ipv4_address} -i ${var.root_ssh_key_path} 'ps aux | grep apt-get | grep -v grep > /dev/null'; do echo 'Waiting for apt-get to complete...'; sleep 10; done"
   }  
 }
 
