@@ -69,7 +69,7 @@ For more information about ansible-vault [click here](https://docs.ansible.com/a
 
 If you require additional tasks to be ran after initial configuration you can add those directly into `ansible/main.yml` or split them out to separate tasks files such as `ansible/tasks/main.yml`.
 
-**NOTE:** Make sure you add a `when`-statement that prevents other tasks from running. See the examples in [setting up the host_list](#setting-up-the-host_list)
+**NOTE:** Make sure you add a `when`-statement that prevents other tasks from running. See the examples in [setting up the host_list](#setting-up-the-host_list).
 
 If your tasks require additional roles you can have them be automatically installed by adding them to the `ansible/files/requirements.yml` file. This will install these roles to the `ansible/roles` folder.
 
