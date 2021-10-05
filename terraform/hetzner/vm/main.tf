@@ -14,8 +14,10 @@ resource "random_string" "name" {
 }
 
 locals {
-  # if server_hostname is null (which is the default value), generate a random hostname with random_pet and random_string
-  server_hostname = var.server_hostname != null ? var.server_hostname : "${random_pet.name[0].id}-${random_string.name[0].result}" # [0] selector is required due the `count = var.module_enabled` trick.
+  # if module_enabled is true
+      # if server_hostname is null (which is the default value), generate a random hostname with random_pet and random_string
+  # else set it server_hostname to disabled
+  server_hostname = var.module_enabled == true ? (var.server_hostname != null ? var.server_hostname : "${random_pet.name[0].id}-${random_string.name[0].result}") : "disabled" # [0] selector is required due the `count = var.module_enabled` trick.
 }
 
 resource "hcloud_server" "main" {
