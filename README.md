@@ -71,7 +71,7 @@ Since not all terraform values are defined for the VM in the `host_list` variabl
 
 ```terraform
 locals {
-  servers = defaults(var.servers, {
+  digitalocean_servers = defaults(var.digitalocean_servers, {
     size               = "s-1vcpu-1gb"
     image              = "ubuntu-20-04-x64"
     region             = "ams3"
@@ -121,7 +121,7 @@ Since we have not defined any other values on both the hosts, the missing values
 
 ```terraform
 locals {
-  servers = defaults(var.servers, {
+  digitalocean_servers = defaults(var.digitalocean_servers, {
     size               = "s-1vcpu-1gb"
     image              = "ubuntu-20-04-x64"
     region             = "ams3"
@@ -174,7 +174,7 @@ All the other values that are missing on each host will again use their default 
 
 ```terraform
 locals {
-  servers = defaults(var.servers, {
+  digitalocean_servers = defaults(var.digitalocean_servers, {
     size               = "s-1vcpu-1gb"
     image              = "ubuntu-20-04-x64"
     region             = "ams3"
@@ -216,28 +216,43 @@ In the ansible code we would define a additional play against the ansible `db` g
 ##### Example 4
 
 The example below defines five hosts split on two different cloud providers. Our previous stack on digitalocean and two additional mail servers on hetzner.
+Here we also set more options on our VMs, such as hostnames, regions and images. 
 
 ```yaml
 host_list: {
   digitalocean: [
     { "name": "web01",
       "tag": "[\"web\"]"
-      "region": "lon1"
+      "hostname": "web01.example.tld",
+      "region": "lon1",
+      "image": "debian-11-x64"
     },
     { "name": "web02",
-      "tag": "[\"web\"]"
+      "tag": "[\"web\"]",
+      "hostname": "web02.example.tld",
+      "region": "ams1",
+      "image": "debian-11-x64"
     },
     { "name": "db01",
       "tag": "[\"db\"]",
-      "size": "s-2vcpu-4gb"
+      "hostname": "db01.example.tld",
+      "size": "s-2vcpu-4gb",
+      "region": "ams3",
+      "image": "rancheros"
     }
   ],
   hetzner: [
     { "name": "mail01",
-      "labels": "{mail = \"\"}"
+      "labels": "{mail = \"\"}",
+      "hostname": "mail01.example.tld",
+      "location": "hel1",
+      "image": "fedora-32"
     },
     { "name": "mail02",
-      "labels": "{mail = \"\"}"
+      "labels": "{mail = \"\"}",
+      "hostname": "mail02.example.tld",
+      "location": "fsn1",
+      "image": "fedora-32"
     }    
   ]
 }
@@ -246,9 +261,8 @@ host_list: {
 All the missing values will again use their default settings as show below: 
 
 ```terraform
-## digitalocean
 locals {
-  servers = defaults(var.servers, {
+  digitalocean_servers = defaults(var.digitalocean_servers, {
     size               = "s-1vcpu-1gb"
     image              = "ubuntu-20-04-x64"
     region             = "ams3"
@@ -257,12 +271,10 @@ locals {
   })
 }
 
-## hetzner
 locals {
-  servers = defaults(var.servers, {
+  hetzner_servers = defaults(var.hetzner_servers, {
     server_type = "cx11"
     image       = "ubuntu-20.04"
-    name        = "testvm"
     location    = "nbg1"
     backups     = false
   })
