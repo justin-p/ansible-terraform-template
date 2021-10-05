@@ -17,6 +17,7 @@ variable "hetzner_servers" {
     image       = optional(string)
     location    = optional(string)
     backups     = optional(bool)
+    ptr         = optional(string)
   }))
   default = {
     "host1" = {
@@ -64,10 +65,11 @@ module "hetzner_vm" {
   server_server_type = each.value.server_type
   server_image       = each.value.image
   server_location    = each.value.location
-
   server_backups     = each.value.backups
   server_ssh_keys    = [local.hetzner_ssh_key]
+  server_dns_ptr     = each.value.ptr
 }
+
 
 output "hetzner_vms" {
   value = module.hetzner_vm
