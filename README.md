@@ -260,6 +260,8 @@ host_list: {
 }
 ```
 
+**NOTE:** Digitalocean PTRs are setup automaticlly ( by digitalocean themselfs ) to match the droplet hostname.
+
 All the missing values will again use their default settings as show below: 
 
 ```terraform
