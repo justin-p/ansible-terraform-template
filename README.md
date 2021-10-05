@@ -131,7 +131,15 @@ Thus in the ansible code we define a play against the ansible `web` group to con
     - name: Configure our webhosts
       ansible.builtin.import_tasks: tasks/web_tasks.yml
       tags: always
+      when:
+        - "'tfvars' not in ansible_run_tags"
+        - "'destroy' not in ansible_run_tags"
+        - "'roles' not in ansible_run_tags"
+        - "'bootstrap' not in ansible_run_tags"
+        - "'print_inventory' not in ansible_run_tags"
 ```
+
+**NOTE:** the `when`-statement is added to ensure the template tags work 'as expected'. If you do not add the `when`-statement these tasks will run when you supply these other tags. A different solution is to replace the `always`-tag and supply that on each run.
 
 ##### Example 2
 
