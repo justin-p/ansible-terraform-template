@@ -1,8 +1,4 @@
 ---
-- name: Wait for file locks (digitalocean likes to lock some apt files on initial droplet creation)
-  ansible.builtin.pause:
-    minutes: 1
-
 - name: Run 'robertdebock.update_package_cache'-role
   ansible.builtin.include_role:
     name: robertdebock.update_package_cache

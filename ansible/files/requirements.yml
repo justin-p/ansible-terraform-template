@@ -21,10 +21,7 @@
   name: robertdebock.hostname
   version: 3.1.2
 ###
-# add addional roles you want to install here
-#
+# add additional roles you want to install here
 # - src:
 #   name:
 #   version:
-#
-###
