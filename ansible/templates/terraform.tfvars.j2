@@ -62,6 +62,8 @@ hetzner_servers = {
 {% endif %}
 {% if 'backups' in dict_item %}    backups = "{{dict_item['backups']}}"
 {% endif %}
+{% if 'ptr' in dict_item %}    ptr = "{{dict_item['ptr']}}"
+{% endif %}
 {% if loop.nextitem is not defined %}
   }
 {% endif %}

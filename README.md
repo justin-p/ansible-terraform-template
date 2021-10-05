@@ -216,7 +216,7 @@ In the ansible code we would define a additional play against the ansible `db` g
 ##### Example 4
 
 The example below defines five hosts split on two different cloud providers. Our previous stack on digitalocean and two additional mail servers on hetzner.
-Here we also set more options on our VMs, such as hostnames, regions and images. 
+Here we also set more options on our VMs, such as hostnames, PTR, regions and images. 
 
 ```yaml
 host_list: {
@@ -245,18 +245,22 @@ host_list: {
     { "name": "mail01",
       "labels": "{mail = \"\"}",
       "hostname": "mail01.example.tld",
+      "ptr": "mail01.example.tld",
       "location": "hel1",
       "image": "fedora-32"
     },
     { "name": "mail02",
       "labels": "{mail = \"\"}",
       "hostname": "mail02.example.tld",
+      "ptr": "mail02.example.tld",
       "location": "fsn1",
       "image": "fedora-32"
     }    
   ]
 }
 ```
+
+**NOTE:** Digitalocean PTRs are setup automaticlly ( by digitalocean themselfs ) to match the droplet hostname.
 
 All the missing values will again use their default settings as show below: 
 
