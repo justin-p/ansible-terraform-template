@@ -141,7 +141,7 @@ Thus in the ansible code we define a play against the ansible `web` group to con
         - "'print_inventory' not in ansible_run_tags"
 ```
 
-**NOTE:** the `when`-statement is added to ensure the template tags work 'as expected'. If you do not add the `when`-statement the `Configure our webhosts` task will run when you supply these tags. A different solution is to replace the `always`-tag on the `Configure our webhosts` task and supply that tag on each run on `ansible-playbook`.
+**NOTE:** the `when`-statement is added to ensure the template tags work 'as expected'. If you do not add the `when`-statement the `Configure our webhosts` task will run when you supply these tags. A different solution is to replace the `always`-tag on the `Configure our webhosts` task and supply that tag on each run, for example `ansible-playbook --tags=your_custom_tag`.
 
 ##### Example 2
 
