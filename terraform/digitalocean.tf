@@ -11,14 +11,17 @@ variable "digitalocean_enabled" {
 variable "digitalocean_servers" {
   description = "A map contaning server(s) that should be created."
   type = map(object({
-    hostname           = optional(string)
-    size               = optional(string)
-    tags               = list(string)
-    image              = optional(string)
-    region             = optional(string)
-    ipv6               = optional(bool)
-    monitoring         = optional(bool)
-    private_networking = optional(bool)
+    hostname      = optional(string)
+    size          = optional(string)
+    tags          = list(string)
+    image         = optional(string)
+    region        = optional(string)
+    backups       = optional(bool)
+    monitoring    = optional(bool)
+    ipv6          = optional(bool)
+    resize_disk   = optional(bool)
+    droplet_agent = optional(bool)
+    create_vpc    = optional(bool)
   }))
   default = {
     "host1" = {
@@ -30,11 +33,15 @@ variable "digitalocean_servers" {
 ## Default values if incompleet server map is supplied
 locals {
   digitalocean_servers = defaults(var.digitalocean_servers, {
-    size               = "s-1vcpu-1gb"
-    image              = "ubuntu-20-04-x64"
-    region             = "ams3"
-    monitoring         = false
-    private_networking = false
+    size          = "s-1vcpu-1gb"
+    image         = "ubuntu-20-04-x64"
+    region        = "ams3"
+    backups       = false
+    monitoring    = false
+    ipv6          = false
+    resize_disk   = true
+    droplet_agent = false
+    create_vpc    = true
   })
 
   # if the digitalocean modules are disabled, set digitalocean_ssh_key to a empty value
@@ -61,16 +68,18 @@ module "digitalocean_vm" {
   root_username     = var.root_username
   root_ssh_key_path = var.root_ssh_key_path
 
-  server_hostname           = each.value.hostname
-  server_tags               = each.value.tags
-  server_size               = each.value.size
-  server_image              = each.value.image
-  server_region             = each.value.region
-  
-  server_ipv6               = each.value.ipv6
-  server_monitoring         = each.value.monitoring
-  server_private_networking = each.value.private_networking
-  server_ssh_keys           = [local.digitalocean_ssh_key]
+  server_hostname      = each.value.hostname
+  server_tags          = each.value.tags
+  server_size          = each.value.size
+  server_image         = each.value.image
+  server_region        = each.value.region
+  server_backups       = each.value.backups
+  server_monitoring    = each.value.monitoring
+  server_ipv6          = each.value.ipv6
+  server_resize_disk   = each.value.resize_disk
+  server_droplet_agent = each.value.droplet_agent
+  server_create_vpc    = each.value.create_vpc
+  server_ssh_keys      = [local.digitalocean_ssh_key]
 }
 
 module "digitalocean_project" {

@@ -20,11 +20,17 @@ digitalocean_servers = {
 {% endif %}
 {% if 'region' in dict_item %}    region = "{{dict_item['region']}}"
 {% endif %}
-{% if 'ipv6' in dict_item %}    ipv6 = {{dict_item['ipv6']}}
+{% if 'backups' in dict_item %}    backups = {{dict_item['backups']}}
 {% endif %}
 {% if 'monitoring' in dict_item %}    monitoring = {{dict_item['monitoring']}}
 {% endif %}
-{% if 'private_networking' in dict_item %}    private_networking = {{dict_item['private_networking']}}
+{% if 'ipv6' in dict_item %}    ipv6 = {{dict_item['ipv6']}}
+{% endif %}
+{% if 'resize_disk' in dict_item %}    resize_disk = {{dict_item['resize_disk']}}
+{% endif %}
+{% if 'droplet_agent' in dict_item %}    droplet_agent = {{dict_item['droplet_agent']}}
+{% endif %}
+{% if 'create_vpc' in dict_item %}    create_vpc = {{dict_item['create_vpc']}}
 {% endif %}
 {% if loop.nextitem is not defined %}
   }
