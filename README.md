@@ -16,7 +16,7 @@ This can also be used as a template for cases where:
 
 ### Ansible
 
-Copy the example `template_info.example.yml` file and add the edit the information as you see fit.
+Copy the example `template_info.example.yml` file and edit the information as you see fit.
 
 ```bash
 cp ansible/defaults/template_info.example.yml ansible/defaults/template_info.yml 
