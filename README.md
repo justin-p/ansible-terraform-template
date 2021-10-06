@@ -126,6 +126,7 @@ Thus in the ansible code we define a play against the ansible `web` group to con
 ---
 - hosts: web
   vars_file:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
   vars:
     ansible_user: "{{ root_username }}"
@@ -186,6 +187,7 @@ Since both hosts are added to the web group in our inventory we don't need to up
 ---
 - hosts: web
   vars_file:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
 
   vars:
@@ -250,6 +252,7 @@ In the ansible code we would define a additional play against the ansible `db` g
 ---
 - hosts: web
   vars_file:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
   vars:
     ansible_user: "{{ root_username }}"
@@ -268,6 +271,7 @@ In the ansible code we would define a additional play against the ansible `db` g
 
 - hosts: db
   vars_file:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
   vars:
     ansible_user: "{{ root_username }}"
@@ -367,6 +371,7 @@ In the ansible code we define a additional play against the the ansible `mail` g
 ---
 - hosts: web
   vars_file:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
   vars:
     ansible_user: "{{ root_username }}"
@@ -385,6 +390,7 @@ In the ansible code we define a additional play against the the ansible `mail` g
 
 - hosts: db
   vars_file:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
   vars:
     ansible_user: "{{ root_username }}"
@@ -403,6 +409,7 @@ In the ansible code we define a additional play against the the ansible `mail` g
 
 - hosts: mail
   vars_file:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
   vars:
     ansible_user: "{{ root_username }}"
