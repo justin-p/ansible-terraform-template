@@ -32,6 +32,7 @@
 ## add your plays/tasks here
 - hosts: all:or_use_a_group_name
   vars_files:
+    - "{{ playbook_dir }}/defaults/main.yml"
     - "{{ playbook_dir }}/defaults/template_info.yml"
   vars:
     ansible_user: "{{ root_username }}"
