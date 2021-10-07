@@ -1,7 +1,7 @@
 project_name      = "testing"
 root_ssh_key_path = "/home/justin-p/.ssh//root-testing"
 
-digitalocean_token   = ""
+digitalocean_token   = "abcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyzabcdefghijqr"
 digitalocean_enabled = true
 digitalocean_servers = {
   "host01" = {
@@ -14,7 +14,7 @@ digitalocean_servers = {
   }
 }
 
-hetzner_token   = ""
+hetzner_token   = "abcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyzabcdefghijqr"
 hetzner_enabled = true
 hetzner_servers = {
   "host03" = {
