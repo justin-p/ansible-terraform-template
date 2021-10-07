@@ -6,8 +6,7 @@
 [![Github License](https://img.shields.io/github/license/justin-p/anster?style=flat-square)](https://github.com/justin-p/anster/blob/main/LICENSE)
 [![Twitter](https://img.shields.io/badge/twitter-JustinPerdok-blue)](https://twitter.com/JustinPerdok)
 
-Anster is a template that uses Ansible variables to create a `terraform.tfvars` file and then call Terraform to create infrastructure on a cloud provider. The output given by Terraform is then parsed and used by Ansible to dynamically built its inventory to provision the created infrastructure.
-Currently Anster supports 2 cloud providers, `digitalocean` and `hetzner`.
+Anster is a template that uses Ansible variables to create a `terraform.tfvars` file and then call Terraform to create infrastructure. The output given by Terraform is then parsed and used by Ansible to dynamically built its inventory to provision the created infrastructure.
 
 Intended to be a quick 'grab and go' for cases where:
 
@@ -17,6 +16,12 @@ Intended to be a quick 'grab and go' for cases where:
 This can also be used as a template for cases where:
 
 - You want to build a project that can consistently spin up and configure the same specific set of infrastructure whenever you need it.
+
+## Supported cloud infrastructure provider providers
+
+Anster currently supports the following cloud infrastructure providers:
+- DigitalOcean
+- Hetzner 
 
 ## Why
 
