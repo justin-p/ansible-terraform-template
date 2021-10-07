@@ -1,6 +1,6 @@
 # 🐜 Anster
 
-`Anster` is a modular infrastructure as code template that glues Ansible and Terraform together to work seemlessly with each other.
+`Anster` is a modular infrastructure as code template that glues Ansible and Terraform together to work seamlessly with each other.
 
 [![Twitter](https://img.shields.io/static/v1?label=twitter&message=@JustinPerdok&style=flat-square&color=1D9BF0)](https://twitter.com/JustinPerdok)
 ![Terraform Version](https://img.shields.io/static/v1?label=Terraform&message=>=1.0.8&style=flat-square&color=5F43E9)
