@@ -1,5 +1,5 @@
 variable "module_enabled" {
-  type = bool
+  type    = bool
   default = false
 }
 
