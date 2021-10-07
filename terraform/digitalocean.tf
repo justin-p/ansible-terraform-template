@@ -1,5 +1,5 @@
 variable "digitalocean_token" {
-  description = "Your Digital Ocean Api token generated from here https://cloud.digitalocean.com/account/api/tokens"
+  description = "Your DigitalOcean API token generated from here https://cloud.digitalocean.com/account/api/tokens"
   default     = "123465789"
 }
 
