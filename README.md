@@ -1,7 +1,7 @@
 # Anster
 
-Anster is a template that uses Ansible to call create a `terraform.tfvars` file and then call Terraform to create infrastructure on a cloud provider. The output given by Terraform is then parsed and used by Ansible to dynamically built its inventory to provision the created infrastructure.
-Currently this project supports 2 cloud providers, `digitalocean` and `hetzner`.
+Anster is a template that uses Ansible variables to create a `terraform.tfvars` file and then call Terraform to create infrastructure on a cloud provider. The output given by Terraform is then parsed and used by Ansible to dynamically built its inventory to provision the created infrastructure.
+Currently Anster supports 2 cloud providers, `digitalocean` and `hetzner`.
 
 Intended to be a quick 'grab and go' for cases where:
 
@@ -11,6 +11,14 @@ Intended to be a quick 'grab and go' for cases where:
 This can also be used as a template for cases where:
 
 - You want to build a project that can consistently spin up and configure the same specific set of infrastructure whenever you need it.
+
+## Why
+
+You might ask "Why would I want to use Anster, I could just use a null_resource/provisioner in Terraform to provision my hosts?", and you would be right. But I personally think that wrapping Ansible around Terraform (instead of Terraform around Ansible) gives you more options, ease of use and flexabilty. 
+
+For example, with Anster you can very easly reapply a playbook/role without having to taint/recreate a resource in Terraform since all the configuration is kept separate from Terraform. It also gives you the abilty to fully make use of Ansible Inventory groups, making it easier to apply tasks/playbooks/roles in bulk to specific groups of hosts without having to create separate Terraform resources for each host type or build some logic around this.
+
+The only downside to wrapping Ansible around Terraform is that you need to parse the Terraform output to build a Ansible inventory file, but Anster does this for you 😄 (for the providers that it supports).
 
 ## Setup
 
