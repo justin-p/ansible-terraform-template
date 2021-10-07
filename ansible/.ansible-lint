@@ -8,6 +8,3 @@ exclude_paths:
   - ${HOME}/.ansible/roles/
 skip_list:
   - experimental
-  - '301'
-  - '401'
-  - '403'

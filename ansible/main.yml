@@ -53,4 +53,3 @@
 
 - ansible.builtin.import_playbook: playbooks/print_inventory/main.yml
   tags: ['never', 'create', 'print_inventory']
-
