@@ -1,6 +1,6 @@
 # Anster
 
-Anster is a template that uses Ansible to call terraform and create infrastructure on a cloud provider, then Ansible uses the output given by Terraform to dynamically built its inventory to provision the created infrastructure.
+Anster is a template that uses Ansible to call create a `terraform.tfvars` file and then call Terraform to create infrastructure on a cloud provider. The output given by Terraform is then parsed and used by Ansible to dynamically built its inventory to provision the created infrastructure.
 Currently this project supports 2 cloud providers, `digitalocean` and `hetzner`.
 
 Intended to be a quick 'grab and go' for cases where:
