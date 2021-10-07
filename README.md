@@ -1,6 +1,6 @@
-# 🐜 Anster
+# 🐜 anster
 
-`Anster` is a modular infrastructure as code template that glues Ansible and Terraform together to work seamlessly with each other.
+`anster` is a modular infrastructure as code template that glues Ansible and Terraform together to work seamlessly with each other.
 
 [![Twitter](https://img.shields.io/static/v1?label=twitter&message=@JustinPerdok&style=flat-square&color=1D9BF0)](https://twitter.com/JustinPerdok)
 ![Terraform Version](https://img.shields.io/static/v1?label=Terraform&message=>=1.0.8&style=flat-square&color=5F43E9)
@@ -10,30 +10,30 @@
 
 ## Introduction
 
-Anster is a infrastructure as code template that combines Ansible and Terraform. [Ansible variables](#setting-up-the-host_list) are used to create a `terraform.tfvars` file. Ansible then calls Terraform to create the infrastructure using some [experimental magic](https://www.terraform.io/docs/language/expressions/type-constraints.html#experimental-optional-object-type-attributes). The output given by Terraform is then parsed by Ansible to [dynamically build it's inventory](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html) and used to configure the created infrastructure.
+`anster` is a infrastructure as code template that combines Ansible and Terraform. [Ansible variables](#setting-up-the-host_list) are used to create a `terraform.tfvars` file. Ansible then calls Terraform to create the infrastructure using some [experimental magic](https://www.terraform.io/docs/language/expressions/type-constraints.html#experimental-optional-object-type-attributes). The output given by Terraform is then parsed by Ansible to [dynamically build it's inventory](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html) and used to configure the created infrastructure.
 
-Anster can be used in a couple of ways:
+`anster` can be used in a couple of ways:
 - You quickly need a VM 'in the cloud' with some barebones config.
 - You want to test/build a Ansible playbook/role against a server hosted by a cloud infrastructure provider.
 - You want to build a project that can consistently spin up and configure the same specific set of infrastructure whenever you need it with a single command.
 
 ## Supported cloud infrastructure providers
 
-Anster currently supports the following cloud infrastructure providers:
+`anster` currently supports the following cloud infrastructure providers:
 - DigitalOcean
 - Hetzner 
 
 ## Why
 
-You might ask "Why would I want to use Anster, I could just use a null_resource/provisioner in Terraform to provision my hosts?", and you would be right. But I personally think that wrapping Ansible around Terraform (instead of Terraform around Ansible, or Terraform that calls inline commands/bash scripts) gives you more options, ease of use and flexabilty. 
+You might ask "Why would I want to use `anster`, I could just use a null_resource/provisioner in Terraform to provision my hosts?", and you would be right. But I personally think that wrapping Ansible around Terraform (instead of Terraform around Ansible, or Terraform that calls inline commands/bash scripts) gives you more options, ease of use and flexabilty. 
 
-For example, with Anster you can very easly reapply a playbook/role without having to taint/recreate a resource in Terraform since all the configuration is kept separate from Terraform. You also don't need to worry that you might overwrite or break things since [Ansible is idempotent](https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency). 
+For example, with `anster` you can very easly reapply a playbook/role without having to taint/recreate a resource in Terraform since all the configuration is kept separate from Terraform. You also don't need to worry that you might overwrite or break things since [Ansible is idempotent](https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency). 
 
-Anster also gives you the abilty to define your infrastructe in a simple Ansible [dictonary](#setting-up-the-host_list) that supports the use of Ansible Inventory groups, making it easier to apply tasks/playbooks/roles in bulk to specific groups of hosts without having to create separate Terraform resources/modules foreach type of host/build logic around type of hosts.
+`anster` also gives you the abilty to define your infrastructe in a simple Ansible [dictonary](#setting-up-the-host_list) that supports the use of Ansible Inventory groups, making it easier to apply tasks/playbooks/roles in bulk to specific groups of hosts without having to create separate Terraform resources/modules foreach type of host/build logic around type of hosts.
 
-The only downside to wrapping Ansible around Terraform is that you need to parse the Terraform output to build a Ansible inventory file, but Anster does this for you 😄 (for the providers that it supports).
+The only downside to wrapping Ansible around Terraform is that you need to parse the Terraform output to build a Ansible inventory file, but `anster` does this for you 😄 (for the providers that it supports).
 
-Anster also includes some useful playbooks and tasks, such as the abilty to automagicly install Ansible roles/collections from a `requirements.yml` or the minimal/sane bootstrap that is applied to all host when they are created (Thanks to [robertdebock](https://github.com/robertdebock/) for his amazing and easy to use collection of roles).
+`anster` also includes some useful playbooks and tasks, such as the abilty to automagicly install Ansible roles/collections from a `requirements.yml` or the minimal/sane bootstrap that is applied to all host when they are created (Thanks to [robertdebock](https://github.com/robertdebock/) for his amazing and easy to use collection of roles).
 
 ## Setup
 
