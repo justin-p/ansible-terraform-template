@@ -24,7 +24,7 @@ on:
       - './ansible/.yamllint'
 
 jobs:
-  molecule:
+  ansible:
     name: Run molecule tests.
     runs-on: ubuntu-20.04
     strategy:
@@ -51,3 +51,26 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
+
+  terraform:
+    name: Run Terraform fmt, init and validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+      
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+      
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
