@@ -64,13 +64,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
       
       - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
+        run: terraform fmt -check -recursive
       
-      - name: Terraform Init
-        id: init
+      - name: Terraform init
         run: terraform init
       
-      - name: Terraform Validate
-        id: validate
+      - name: Terraform validate
         run: terraform validate
