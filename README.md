@@ -20,6 +20,8 @@ For example, with Anster you can very easly reapply a playbook/role without havi
 
 The only downside to wrapping Ansible around Terraform is that you need to parse the Terraform output to build a Ansible inventory file, but Anster does this for you 😄 (for the providers that it supports).
 
+Anster also includes some useful playbooks and tasks, such as the abilty to automagicly install ansible roles/collections or the minimal/sane bootstrap that is applied to all host when they are created (Thanks to [robertdebock](https://github.com/robertdebock/) for his amazing collection of roles).
+
 ## Setup
 
 ### Ansible
