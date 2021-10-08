@@ -17,6 +17,8 @@
 - You want to test/build a Ansible playbook/role against a server hosted by a cloud infrastructure provider.
 - You want to build a project that can consistently spin up and configure the same specific set of infrastructure whenever you need it with a single command.
 
+For more information, please refer to the wiki page [here](https://github.com/justin-p/anster/wiki).
+
 ## License
 
 MIT
